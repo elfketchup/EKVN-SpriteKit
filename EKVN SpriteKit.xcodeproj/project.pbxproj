@@ -1,0 +1,439 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1AEDA16019CA4CF8009B30A3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AEDA15F19CA4CF8009B30A3 /* main.m */; };
+		1AEDA16319CA4CF8009B30A3 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AEDA16219CA4CF8009B30A3 /* AppDelegate.m */; };
+		1AEDA16619CA4CF8009B30A3 /* GameScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AEDA16519CA4CF8009B30A3 /* GameScene.m */; };
+		1AEDA16819CA4CF8009B30A3 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 1AEDA16719CA4CF8009B30A3 /* GameScene.sks */; };
+		1AEDA16B19CA4CF8009B30A3 /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AEDA16A19CA4CF8009B30A3 /* GameViewController.m */; };
+		1AEDA16E19CA4CF8009B30A3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1AEDA16C19CA4CF8009B30A3 /* Main.storyboard */; };
+		1AEDA17019CA4CF8009B30A3 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1AEDA16F19CA4CF8009B30A3 /* Images.xcassets */; };
+		1AEDA17319CA4CF8009B30A3 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1AEDA17119CA4CF8009B30A3 /* LaunchScreen.xib */; };
+		1AEDA17F19CA4CF8009B30A3 /* EKVN_SpriteKitTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AEDA17E19CA4CF8009B30A3 /* EKVN_SpriteKitTests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		1AEDA17919CA4CF8009B30A3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1AEDA15219CA4CF8009B30A3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1AEDA15919CA4CF8009B30A3;
+			remoteInfo = "EKVN SpriteKit";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		1AEDA15A19CA4CF8009B30A3 /* EKVN SpriteKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "EKVN SpriteKit.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1AEDA15E19CA4CF8009B30A3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1AEDA15F19CA4CF8009B30A3 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		1AEDA16119CA4CF8009B30A3 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		1AEDA16219CA4CF8009B30A3 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		1AEDA16419CA4CF8009B30A3 /* GameScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameScene.h; sourceTree = "<group>"; };
+		1AEDA16519CA4CF8009B30A3 /* GameScene.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GameScene.m; sourceTree = "<group>"; };
+		1AEDA16719CA4CF8009B30A3 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
+		1AEDA16919CA4CF8009B30A3 /* GameViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameViewController.h; sourceTree = "<group>"; };
+		1AEDA16A19CA4CF8009B30A3 /* GameViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GameViewController.m; sourceTree = "<group>"; };
+		1AEDA16D19CA4CF8009B30A3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		1AEDA16F19CA4CF8009B30A3 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		1AEDA17219CA4CF8009B30A3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		1AEDA17819CA4CF8009B30A3 /* EKVN SpriteKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "EKVN SpriteKitTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1AEDA17D19CA4CF8009B30A3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1AEDA17E19CA4CF8009B30A3 /* EKVN_SpriteKitTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EKVN_SpriteKitTests.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		1AEDA15719CA4CF8009B30A3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1AEDA17519CA4CF8009B30A3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1AEDA15119CA4CF8009B30A3 = {
+			isa = PBXGroup;
+			children = (
+				1AEDA15C19CA4CF8009B30A3 /* EKVN SpriteKit */,
+				1AEDA17B19CA4CF8009B30A3 /* EKVN SpriteKitTests */,
+				1AEDA15B19CA4CF8009B30A3 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		1AEDA15B19CA4CF8009B30A3 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1AEDA15A19CA4CF8009B30A3 /* EKVN SpriteKit.app */,
+				1AEDA17819CA4CF8009B30A3 /* EKVN SpriteKitTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		1AEDA15C19CA4CF8009B30A3 /* EKVN SpriteKit */ = {
+			isa = PBXGroup;
+			children = (
+				1AEDA16119CA4CF8009B30A3 /* AppDelegate.h */,
+				1AEDA16219CA4CF8009B30A3 /* AppDelegate.m */,
+				1AEDA16419CA4CF8009B30A3 /* GameScene.h */,
+				1AEDA16519CA4CF8009B30A3 /* GameScene.m */,
+				1AEDA16719CA4CF8009B30A3 /* GameScene.sks */,
+				1AEDA16919CA4CF8009B30A3 /* GameViewController.h */,
+				1AEDA16A19CA4CF8009B30A3 /* GameViewController.m */,
+				1AEDA16C19CA4CF8009B30A3 /* Main.storyboard */,
+				1AEDA16F19CA4CF8009B30A3 /* Images.xcassets */,
+				1AEDA17119CA4CF8009B30A3 /* LaunchScreen.xib */,
+				1AEDA15D19CA4CF8009B30A3 /* Supporting Files */,
+			);
+			path = "EKVN SpriteKit";
+			sourceTree = "<group>";
+		};
+		1AEDA15D19CA4CF8009B30A3 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				1AEDA15E19CA4CF8009B30A3 /* Info.plist */,
+				1AEDA15F19CA4CF8009B30A3 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		1AEDA17B19CA4CF8009B30A3 /* EKVN SpriteKitTests */ = {
+			isa = PBXGroup;
+			children = (
+				1AEDA17E19CA4CF8009B30A3 /* EKVN_SpriteKitTests.m */,
+				1AEDA17C19CA4CF8009B30A3 /* Supporting Files */,
+			);
+			path = "EKVN SpriteKitTests";
+			sourceTree = "<group>";
+		};
+		1AEDA17C19CA4CF8009B30A3 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				1AEDA17D19CA4CF8009B30A3 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1AEDA15919CA4CF8009B30A3 /* EKVN SpriteKit */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1AEDA18219CA4CF8009B30A3 /* Build configuration list for PBXNativeTarget "EKVN SpriteKit" */;
+			buildPhases = (
+				1AEDA15619CA4CF8009B30A3 /* Sources */,
+				1AEDA15719CA4CF8009B30A3 /* Frameworks */,
+				1AEDA15819CA4CF8009B30A3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "EKVN SpriteKit";
+			productName = "EKVN SpriteKit";
+			productReference = 1AEDA15A19CA4CF8009B30A3 /* EKVN SpriteKit.app */;
+			productType = "com.apple.product-type.application";
+		};
+		1AEDA17719CA4CF8009B30A3 /* EKVN SpriteKitTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1AEDA18519CA4CF8009B30A3 /* Build configuration list for PBXNativeTarget "EKVN SpriteKitTests" */;
+			buildPhases = (
+				1AEDA17419CA4CF8009B30A3 /* Sources */,
+				1AEDA17519CA4CF8009B30A3 /* Frameworks */,
+				1AEDA17619CA4CF8009B30A3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				1AEDA17A19CA4CF8009B30A3 /* PBXTargetDependency */,
+			);
+			name = "EKVN SpriteKitTests";
+			productName = "EKVN SpriteKitTests";
+			productReference = 1AEDA17819CA4CF8009B30A3 /* EKVN SpriteKitTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		1AEDA15219CA4CF8009B30A3 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0600;
+				ORGANIZATIONNAME = "James Briones";
+				TargetAttributes = {
+					1AEDA15919CA4CF8009B30A3 = {
+						CreatedOnToolsVersion = 6.0;
+					};
+					1AEDA17719CA4CF8009B30A3 = {
+						CreatedOnToolsVersion = 6.0;
+						TestTargetID = 1AEDA15919CA4CF8009B30A3;
+					};
+				};
+			};
+			buildConfigurationList = 1AEDA15519CA4CF8009B30A3 /* Build configuration list for PBXProject "EKVN SpriteKit" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 1AEDA15119CA4CF8009B30A3;
+			productRefGroup = 1AEDA15B19CA4CF8009B30A3 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1AEDA15919CA4CF8009B30A3 /* EKVN SpriteKit */,
+				1AEDA17719CA4CF8009B30A3 /* EKVN SpriteKitTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		1AEDA15819CA4CF8009B30A3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1AEDA17319CA4CF8009B30A3 /* LaunchScreen.xib in Resources */,
+				1AEDA17019CA4CF8009B30A3 /* Images.xcassets in Resources */,
+				1AEDA16819CA4CF8009B30A3 /* GameScene.sks in Resources */,
+				1AEDA16E19CA4CF8009B30A3 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1AEDA17619CA4CF8009B30A3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1AEDA15619CA4CF8009B30A3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1AEDA16B19CA4CF8009B30A3 /* GameViewController.m in Sources */,
+				1AEDA16319CA4CF8009B30A3 /* AppDelegate.m in Sources */,
+				1AEDA16619CA4CF8009B30A3 /* GameScene.m in Sources */,
+				1AEDA16019CA4CF8009B30A3 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1AEDA17419CA4CF8009B30A3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1AEDA17F19CA4CF8009B30A3 /* EKVN_SpriteKitTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		1AEDA17A19CA4CF8009B30A3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1AEDA15919CA4CF8009B30A3 /* EKVN SpriteKit */;
+			targetProxy = 1AEDA17919CA4CF8009B30A3 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		1AEDA16C19CA4CF8009B30A3 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1AEDA16D19CA4CF8009B30A3 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		1AEDA17119CA4CF8009B30A3 /* LaunchScreen.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1AEDA17219CA4CF8009B30A3 /* Base */,
+			);
+			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		1AEDA18019CA4CF8009B30A3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		1AEDA18119CA4CF8009B30A3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		1AEDA18319CA4CF8009B30A3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = "EKVN SpriteKit/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		1AEDA18419CA4CF8009B30A3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = "EKVN SpriteKit/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		1AEDA18619CA4CF8009B30A3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "EKVN SpriteKitTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/EKVN SpriteKit.app/EKVN SpriteKit";
+			};
+			name = Debug;
+		};
+		1AEDA18719CA4CF8009B30A3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "EKVN SpriteKitTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/EKVN SpriteKit.app/EKVN SpriteKit";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1AEDA15519CA4CF8009B30A3 /* Build configuration list for PBXProject "EKVN SpriteKit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1AEDA18019CA4CF8009B30A3 /* Debug */,
+				1AEDA18119CA4CF8009B30A3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1AEDA18219CA4CF8009B30A3 /* Build configuration list for PBXNativeTarget "EKVN SpriteKit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1AEDA18319CA4CF8009B30A3 /* Debug */,
+				1AEDA18419CA4CF8009B30A3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		1AEDA18519CA4CF8009B30A3 /* Build configuration list for PBXNativeTarget "EKVN SpriteKitTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1AEDA18619CA4CF8009B30A3 /* Debug */,
+				1AEDA18719CA4CF8009B30A3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 1AEDA15219CA4CF8009B30A3 /* Project object */;
+}
