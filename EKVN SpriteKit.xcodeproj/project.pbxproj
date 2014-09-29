@@ -7,6 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1A28536619CE14410061A247 /* EKRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A28535D19CE14410061A247 /* EKRecord.m */; };
+		1A28536719CE14410061A247 /* VNScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A28535F19CE14410061A247 /* VNScene.m */; };
+		1A28536819CE14410061A247 /* VNScript.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A28536119CE14410061A247 /* VNScript.m */; };
+		1A28536919CE14410061A247 /* VNSystemCall.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A28536319CE14410061A247 /* VNSystemCall.m */; };
+		1A28536A19CE14410061A247 /* VNTestScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A28536519CE14410061A247 /* VNTestScene.m */; };
+		1A2B390719D88B9B00A1B4BA /* music01.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 1A2B390019D88B9B00A1B4BA /* music01.mp3 */; };
+		1A2B390819D88B9B00A1B4BA /* roar1.caf in Resources */ = {isa = PBXBuildFile; fileRef = 1A2B390119D88B9B00A1B4BA /* roar1.caf */; };
+		1A2B390919D88B9B00A1B4BA /* demo script.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1A2B390319D88B9B00A1B4BA /* demo script.plist */; };
+		1A2B390A19D88B9B00A1B4BA /* main_menu.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1A2B390419D88B9B00A1B4BA /* main_menu.plist */; };
+		1A2B390B19D88B9B00A1B4BA /* test script.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1A2B390519D88B9B00A1B4BA /* test script.plist */; };
+		1A2B390C19D88B9B00A1B4BA /* vnscene view settings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1A2B390619D88B9B00A1B4BA /* vnscene view settings.plist */; };
+		1A2B393119D88BD800A1B4BA /* DSMultilineLabelNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B391019D88BD800A1B4BA /* DSMultilineLabelNode.m */; };
+		1A2B394919D88C4300A1B4BA /* EKUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B394819D88C4300A1B4BA /* EKUtils.m */; };
 		1AEDA16019CA4CF8009B30A3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AEDA15F19CA4CF8009B30A3 /* main.m */; };
 		1AEDA16319CA4CF8009B30A3 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AEDA16219CA4CF8009B30A3 /* AppDelegate.m */; };
 		1AEDA16619CA4CF8009B30A3 /* GameScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AEDA16519CA4CF8009B30A3 /* GameScene.m */; };
@@ -29,6 +42,27 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1A28535C19CE14410061A247 /* EKRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EKRecord.h; sourceTree = "<group>"; };
+		1A28535D19CE14410061A247 /* EKRecord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EKRecord.m; sourceTree = "<group>"; };
+		1A28535E19CE14410061A247 /* VNScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VNScene.h; sourceTree = "<group>"; };
+		1A28535F19CE14410061A247 /* VNScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VNScene.m; sourceTree = "<group>"; };
+		1A28536019CE14410061A247 /* VNScript.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VNScript.h; sourceTree = "<group>"; };
+		1A28536119CE14410061A247 /* VNScript.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VNScript.m; sourceTree = "<group>"; };
+		1A28536219CE14410061A247 /* VNSystemCall.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VNSystemCall.h; sourceTree = "<group>"; };
+		1A28536319CE14410061A247 /* VNSystemCall.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VNSystemCall.m; sourceTree = "<group>"; };
+		1A28536419CE14410061A247 /* VNTestScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VNTestScene.h; sourceTree = "<group>"; };
+		1A28536519CE14410061A247 /* VNTestScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VNTestScene.m; sourceTree = "<group>"; };
+		1A2B390019D88B9B00A1B4BA /* music01.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = music01.mp3; sourceTree = "<group>"; };
+		1A2B390119D88B9B00A1B4BA /* roar1.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = roar1.caf; sourceTree = "<group>"; };
+		1A2B390319D88B9B00A1B4BA /* demo script.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "demo script.plist"; sourceTree = "<group>"; };
+		1A2B390419D88B9B00A1B4BA /* main_menu.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = main_menu.plist; sourceTree = "<group>"; };
+		1A2B390519D88B9B00A1B4BA /* test script.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "test script.plist"; sourceTree = "<group>"; };
+		1A2B390619D88B9B00A1B4BA /* vnscene view settings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "vnscene view settings.plist"; sourceTree = "<group>"; };
+		1A2B390F19D88BD800A1B4BA /* DSMultilineLabelNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DSMultilineLabelNode.h; sourceTree = "<group>"; };
+		1A2B391019D88BD800A1B4BA /* DSMultilineLabelNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DSMultilineLabelNode.m; sourceTree = "<group>"; };
+		1A2B392F19D88BD800A1B4BA /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README.txt; path = DSMultilineLabelNode/README.txt; sourceTree = "<group>"; };
+		1A2B394719D88C4300A1B4BA /* EKUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EKUtils.h; sourceTree = "<group>"; };
+		1A2B394819D88C4300A1B4BA /* EKUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EKUtils.m; sourceTree = "<group>"; };
 		1AEDA15A19CA4CF8009B30A3 /* EKVN SpriteKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "EKVN SpriteKit.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1AEDA15E19CA4CF8009B30A3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1AEDA15F19CA4CF8009B30A3 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -65,6 +99,63 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1A28535B19CE14410061A247 /* EKVN Classes */ = {
+			isa = PBXGroup;
+			children = (
+				1A2B394719D88C4300A1B4BA /* EKUtils.h */,
+				1A2B394819D88C4300A1B4BA /* EKUtils.m */,
+				1A28535C19CE14410061A247 /* EKRecord.h */,
+				1A28535D19CE14410061A247 /* EKRecord.m */,
+				1A28535E19CE14410061A247 /* VNScene.h */,
+				1A28535F19CE14410061A247 /* VNScene.m */,
+				1A28536019CE14410061A247 /* VNScript.h */,
+				1A28536119CE14410061A247 /* VNScript.m */,
+				1A28536219CE14410061A247 /* VNSystemCall.h */,
+				1A28536319CE14410061A247 /* VNSystemCall.m */,
+				1A28536419CE14410061A247 /* VNTestScene.h */,
+				1A28536519CE14410061A247 /* VNTestScene.m */,
+			);
+			path = "EKVN Classes";
+			sourceTree = "<group>";
+		};
+		1A2B38FE19D88B9B00A1B4BA /* EKVN resources */ = {
+			isa = PBXGroup;
+			children = (
+				1A2B38FF19D88B9B00A1B4BA /* audio resources */,
+				1A2B390219D88B9B00A1B4BA /* plists */,
+			);
+			path = "EKVN resources";
+			sourceTree = "<group>";
+		};
+		1A2B38FF19D88B9B00A1B4BA /* audio resources */ = {
+			isa = PBXGroup;
+			children = (
+				1A2B390019D88B9B00A1B4BA /* music01.mp3 */,
+				1A2B390119D88B9B00A1B4BA /* roar1.caf */,
+			);
+			path = "audio resources";
+			sourceTree = "<group>";
+		};
+		1A2B390219D88B9B00A1B4BA /* plists */ = {
+			isa = PBXGroup;
+			children = (
+				1A2B390319D88B9B00A1B4BA /* demo script.plist */,
+				1A2B390419D88B9B00A1B4BA /* main_menu.plist */,
+				1A2B390519D88B9B00A1B4BA /* test script.plist */,
+				1A2B390619D88B9B00A1B4BA /* vnscene view settings.plist */,
+			);
+			path = plists;
+			sourceTree = "<group>";
+		};
+		1A2B390D19D88BD800A1B4BA /* DSMultilineLabelNode */ = {
+			isa = PBXGroup;
+			children = (
+				1A2B390F19D88BD800A1B4BA /* DSMultilineLabelNode.h */,
+				1A2B391019D88BD800A1B4BA /* DSMultilineLabelNode.m */,
+			);
+			path = DSMultilineLabelNode;
+			sourceTree = "<group>";
+		};
 		1AEDA15119CA4CF8009B30A3 = {
 			isa = PBXGroup;
 			children = (
@@ -86,6 +177,8 @@
 		1AEDA15C19CA4CF8009B30A3 /* EKVN SpriteKit */ = {
 			isa = PBXGroup;
 			children = (
+				1A2B390D19D88BD800A1B4BA /* DSMultilineLabelNode */,
+				1A28535B19CE14410061A247 /* EKVN Classes */,
 				1AEDA16119CA4CF8009B30A3 /* AppDelegate.h */,
 				1AEDA16219CA4CF8009B30A3 /* AppDelegate.m */,
 				1AEDA16419CA4CF8009B30A3 /* GameScene.h */,
@@ -104,6 +197,8 @@
 		1AEDA15D19CA4CF8009B30A3 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				1A2B392F19D88BD800A1B4BA /* README.txt */,
+				1A2B38FE19D88B9B00A1B4BA /* EKVN resources */,
 				1AEDA15E19CA4CF8009B30A3 /* Info.plist */,
 				1AEDA15F19CA4CF8009B30A3 /* main.m */,
 			);
@@ -176,6 +271,7 @@
 				TargetAttributes = {
 					1AEDA15919CA4CF8009B30A3 = {
 						CreatedOnToolsVersion = 6.0;
+						DevelopmentTeam = VJ7ZPNN4QF;
 					};
 					1AEDA17719CA4CF8009B30A3 = {
 						CreatedOnToolsVersion = 6.0;
@@ -207,10 +303,16 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1A2B390819D88B9B00A1B4BA /* roar1.caf in Resources */,
 				1AEDA17319CA4CF8009B30A3 /* LaunchScreen.xib in Resources */,
+				1A2B390A19D88B9B00A1B4BA /* main_menu.plist in Resources */,
+				1A2B390719D88B9B00A1B4BA /* music01.mp3 in Resources */,
 				1AEDA17019CA4CF8009B30A3 /* Images.xcassets in Resources */,
 				1AEDA16819CA4CF8009B30A3 /* GameScene.sks in Resources */,
+				1A2B390919D88B9B00A1B4BA /* demo script.plist in Resources */,
+				1A2B390C19D88B9B00A1B4BA /* vnscene view settings.plist in Resources */,
 				1AEDA16E19CA4CF8009B30A3 /* Main.storyboard in Resources */,
+				1A2B390B19D88B9B00A1B4BA /* test script.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -228,10 +330,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1A28536819CE14410061A247 /* VNScript.m in Sources */,
+				1A2B394919D88C4300A1B4BA /* EKUtils.m in Sources */,
+				1A28536719CE14410061A247 /* VNScene.m in Sources */,
+				1A28536A19CE14410061A247 /* VNTestScene.m in Sources */,
+				1A28536919CE14410061A247 /* VNSystemCall.m in Sources */,
 				1AEDA16B19CA4CF8009B30A3 /* GameViewController.m in Sources */,
 				1AEDA16319CA4CF8009B30A3 /* AppDelegate.m in Sources */,
+				1A28536619CE14410061A247 /* EKRecord.m in Sources */,
 				1AEDA16619CA4CF8009B30A3 /* GameScene.m in Sources */,
 				1AEDA16019CA4CF8009B30A3 /* main.m in Sources */,
+				1A2B393119D88BD800A1B4BA /* DSMultilineLabelNode.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -355,7 +464,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = "EKVN SpriteKit/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -365,7 +476,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = "EKVN SpriteKit/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -424,6 +537,7 @@
 				1AEDA18419CA4CF8009B30A3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		1AEDA18519CA4CF8009B30A3 /* Build configuration list for PBXNativeTarget "EKVN SpriteKitTests" */ = {
 			isa = XCConfigurationList;
@@ -432,6 +546,7 @@
 				1AEDA18719CA4CF8009B30A3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
