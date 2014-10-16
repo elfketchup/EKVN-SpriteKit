@@ -8,7 +8,7 @@
 		<string>For example, the sound of a wild animal roaring...</string>
 		<string>.PLAYSOUND:roar1.caf</string>
 		<string>You can also play music, and choose whether it loops indefinitely or not.</string>
-		<string>.PLAYMUSIC:music01</string>
+		<string>.PLAYMUSIC:music01.mp3</string>
 		<string>And, of course, you can also stop it if you like…</string>
 		<string>Just use .PLAYMUSIC:nil command.</string>
 		<string>.PLAYMUSIC:nil</string>
@@ -36,7 +36,6 @@
 		<string>Anyways, I suppose that&apos;s it for now.</string>
 		<string>Hopefully, you can use this to make some good games!</string>
 		<string>You can contact the author/programmer at: http://twitter.com/elfketchup</string>
-		<string>Or at: http://elfketchup.tumblr.com</string>
 		<string>Alright, bye for real this time.</string>
 		<string>(The end?)</string>
 	</array>

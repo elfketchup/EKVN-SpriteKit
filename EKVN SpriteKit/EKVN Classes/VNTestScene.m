@@ -9,6 +9,7 @@
 #import "VNScene.h"
 #import "EKRecord.h"
 #import "ekutils.h"
+#import "OALSimpleAudio.h"
 
 // Some Z-values, so that Cocos2D knows where to position things on the Z-coordinate (and which nodes will
 // be drawn on top of which other nodes!)
@@ -223,20 +224,10 @@
 
 #pragma mark - Touch controls
 
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    // There's not really anything going on in this function, but if this fucntion isn't implemented, then
-    // any input in this class won't be recognized by Cocos2D v3. Thus, this function has been "implemented,"
-    // just so that Cocos2D will pay attention to all the "real" action going on in the touchEnded function.
-}
-
 - (void)stopMenuMusic
 {
-    if( isPlayingMusic && backgroundMusicPlayer ) {
-        //[[OALSimpleAudio sharedInstance] stopBg];
-        [backgroundMusicPlayer stop];
-        backgroundMusicPlayer.currentTime = 0; // Resets play time
-    }
+    if( isPlayingMusic )
+        [[OALSimpleAudio sharedInstance] stopBg];
     
     isPlayingMusic = NO;
 }
@@ -249,21 +240,11 @@
     if( isPlayingMusic )
         [self stopMenuMusic];
     
-    
-    NSError* error;
-    NSURL* backgroundMusicURL = [[NSBundle mainBundle] URLForResource:filename withExtension:@"mp3"];
-    backgroundMusicPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:backgroundMusicURL error:&error];
-    backgroundMusicPlayer.numberOfLoops = -1; // infinite
-    [backgroundMusicPlayer prepareToPlay];
-    [backgroundMusicPlayer play];
+    [[OALSimpleAudio sharedInstance] playBg:filename loop:true];
     
     isPlayingMusic = YES;
 }
 
-
-
-//- (void)ccTouchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
-//- (void)touchEnded:(UITouch *)touch withEvent:(UIEvent *)event
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
     for( UITouch* touch in touches ) {

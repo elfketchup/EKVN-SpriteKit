@@ -206,7 +206,6 @@
     
     BOOL effectIsRunning;
     BOOL isPlayingMusic;
-    AVAudioPlayer* bgMusicPlayer; // Plays background music
     
     NSMutableArray* soundsLoaded;
     NSMutableArray* buttons;

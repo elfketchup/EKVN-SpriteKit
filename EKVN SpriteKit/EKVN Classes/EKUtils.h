@@ -24,7 +24,7 @@ void EKSetScreenSizeInPoints( CGFloat width, CGFloat height );
 CGSize EKScreenSizeInPoints();
 
 // Retrieves view/screen size data from an SKView object. 
-void EKGetScreenDataFromView( SKView* view );
+void EKSetScreenDataFromView( SKView* view );
 
 // Sets position using normalized coordinates; used mostly to set SKNode positions to normalized coordinates (0.0 to 1.0)
 CGPoint EKPositionWithNormalizedCoordinates( CGFloat normalizedX, CGFloat normalizedY );

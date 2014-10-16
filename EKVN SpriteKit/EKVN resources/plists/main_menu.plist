@@ -51,6 +51,6 @@
 	<key>script to load</key>
 	<string>demo script</string>
 	<key>menu music</key>
-	<string>music01</string>
+	<string>music01.mp3</string>
 </dict>
 </plist>

@@ -28,8 +28,6 @@ Contact
 
 Twitter: http://twitter.com/elfketchup
 
-Tumblr: http://elfketchup.tumblr.com/
-
 Getting Started
 ===============
 
@@ -64,7 +62,7 @@ in this example we’ll set it to iPhone.
 3. Name your project.
 
 4. Copy over the files/folders you need (for simplicity's sake, this would normally be the  “EKVN Classes,” 
-“EKVN Resources,” and “DSMultilineLabelNode” folders). Any files you don't need can be removed later.
+“EKVN Resources,” “ObjectAL,” and “DSMultilineLabelNode” folders). Any files you don't need can be removed later.
 
 5. Drag the folders from Finder into the project files list in Xcode. (I would leave the 
 "Copy items into destination group's folder" option checked)

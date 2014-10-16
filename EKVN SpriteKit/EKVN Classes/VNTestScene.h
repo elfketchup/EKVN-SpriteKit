@@ -49,9 +49,7 @@
 #define VNTestSceneMenuMusic                @"menu music"
 
 @interface VNTestScene : SKScene
-{
-    AVAudioPlayer* backgroundMusicPlayer;
-    
+{    
     //CCLabelTTF* playLabel;
     //CCLabelTTF* loadLabel;
     DSMultilineLabelNode* playLabel;

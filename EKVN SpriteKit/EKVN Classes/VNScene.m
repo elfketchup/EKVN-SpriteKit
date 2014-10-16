@@ -8,7 +8,7 @@
 #import "VNScene.h"
 #import "EKRecord.h"
 #import "ekutils.h"
-//#import "OALSimpleAudio.h"
+#import "OALSimpleAudio.h"
 
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks" // Disables "performSelector"-related warnings
 
@@ -46,7 +46,7 @@ VNScene* theCurrentScene = nil;
 
 - (void)didMoveToView:(SKView *)view
 {
-    EKGetScreenDataFromView(view); // Get view and screen size data; this is used to position UI elements
+    EKSetScreenDataFromView(view); // Get view and screen size data; this is used to position UI elements
     
     self.isFinished = NO;
     self.userInteractionEnabled = YES;
@@ -121,55 +121,34 @@ VNScene* theCurrentScene = nil;
 
 #pragma mark - Audio
 
-/*
- 
- NOTE: For audio, cocos2d came with ObjectAL and OALSimpleAudio. SpriteKit, however, does not. To make up for this,
-       here's a few very basic audio functions. While they lack the power and robustness of ObjectAL, they should
-       be good enough for standard visual-novel audio... I hope. :)
- 
- */
-
 - (void)stopBGMusic
 {
-    NSLog(@"did call stop bgmusic");
-    
-    if( isPlayingMusic && bgMusicPlayer ) {
-        [bgMusicPlayer stop];
-        NSLog(@"[bgmusicplayer stop]");
-        bgMusicPlayer.currentTime = 0; // Reset play time (not doing this just pauses the music, instead of stopping it completely)
-    }
+    if( isPlayingMusic )
+        [[OALSimpleAudio sharedInstance] stopBg];
     
     isPlayingMusic = NO;
 }
 
 - (void)playBGMusic:(NSString*)filename willLoop:(BOOL)willLoopForever
 {
-    NSLog(@"did call play bgmusic");
+    //NSLog(@"did call play bgmusic");
     if( filename == nil )
         return;
     
+    bool loop = true;
+    if( willLoopForever == NO )
+        loop = false;
+    
     [self stopBGMusic]; // Cancel any existing music
-    NSLog(@"calling stopmusic before playing more music");
-    
-    NSInteger numberOfLoops = 0;
-    
-    if( willLoopForever )
-        numberOfLoops = -1; // A negative value here means an infinite number of loops
-    
-    NSError* error;
-    NSURL* backgroundMusicURL = [[NSBundle mainBundle] URLForResource:filename withExtension:@"mp3"];
-    bgMusicPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:backgroundMusicURL error:&error];
-    bgMusicPlayer.numberOfLoops = numberOfLoops;
-    [bgMusicPlayer prepareToPlay];
-    [bgMusicPlayer play];
+    [[OALSimpleAudio sharedInstance] playBg:filename loop:loop];
     
     isPlayingMusic = YES;
-    NSLog(@"isPlayingMusic = %d", isPlayingMusic);
 }
 
 - (void)playSoundEffect:(NSString*)filename
 {
-    [self runAction:[SKAction playSoundFileNamed:filename waitForCompletion:NO]];
+    //[self runAction:[SKAction playSoundFileNamed:filename waitForCompletion:NO]];
+    [[OALSimpleAudio sharedInstance] playEffect:filename];
 }
 
 

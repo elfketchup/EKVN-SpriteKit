@@ -24,7 +24,7 @@
     /* Sprite Kit applies additional optimizations to improve rendering performance */
     skView.ignoresSiblingOrder = YES;
     
-    EKGetScreenDataFromView( skView );
+    EKSetScreenDataFromView( skView );
     
     // Create and configure the scene.
     //GameScene *scene = [GameScene unarchiveFromFile:@"GameScene"];

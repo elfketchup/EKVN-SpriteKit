@@ -20,7 +20,7 @@ Example: .addsprite:girl.png:NO
 
   Name: .ALIGNSPRITE
 
-  Aligns a particular sprite in either the center, left, or right ends of the screen. This is done
+  Aligns a particular sprite in either the center, l.eft, or right ends of the screen. This is done
   by finding the center of the sprite and setting the X coordinate to either 25% of the screen's
   width (on the iPhone 4S, this is 480*0.25 or 120), 50% (the middle), or 75% (the right).
 
@@ -261,12 +261,14 @@ Example: .addsprite:girl.png:NO
 
   Parameters:
 
-      #1: name of music filename, without filename extension (so just “song” not “song.mp3”) (string)
+      #1: name of music filename (string)
           (you can write "nil" to stop all the music)
 
       #2: (Optional) Should this loop forever? (BOOL value) (default is YES)
 
-  Example: .PLAYMUSIC:LevelUpper:NO
+  Example: .PLAYMUSIC:LevelUpper.mp3:NO
+
+  (To stop music: .PLAYMUSIC:nil)
 
 
 ================

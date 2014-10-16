@@ -27,7 +27,7 @@ CGSize EKScreenSizeInPoints()
     return CGSizeMake( EKScreenWidthInPoints, EKScreenHeightInPoints );
 }
 
-void EKGetScreenDataFromView( SKView* view )
+void EKSetScreenDataFromView( SKView* view )
 {
     CGSize viewSizeInPoints = view.frame.size;
     

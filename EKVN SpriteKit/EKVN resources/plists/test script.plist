@@ -41,7 +41,7 @@
 		<string>Hi, my name is Matsuri.</string>
 		<string>.SETSPEAKER:nil</string>
 		<string>You&apos;ve now met your first character.</string>
-		<string>.PLAYMUSIC:music01</string>
+		<string>.PLAYMUSIC:music01.mp3</string>
 		<string>.ALIGNSPRITE:matsuri_close.png:left</string>
 		<string>.ALIGNSPRITE:matsuri_close.png:right</string>
 		<string>.ALIGNSPRITE:matsuri_close.png:center</string>
