@@ -125,6 +125,7 @@
 #define VNSceneViewOverrideSpeechSizeKey        @"override speech size from save"
 #define VNSceneViewOverrideSpeakerFontKey       @"override speaker font from save"
 #define VNSceneViewOverrideSpeakerSizeKey       @"override speaker size from save"
+#define VNSceneViewNoSkipUntilTextShownKey      @"no skipping until text is shown" // Prevents skipping until the text is fully shown
 
 // Dictionary keys
 #define VNSceneSavedScriptInfoKey       @"script info"
@@ -206,6 +207,7 @@
     
     BOOL effectIsRunning;
     BOOL isPlayingMusic;
+    BOOL noSkippingUntilTextIsShown;
     
     NSMutableArray* soundsLoaded;
     NSMutableArray* buttons;
