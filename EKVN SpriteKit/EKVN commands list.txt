@@ -434,27 +434,6 @@ Example: .addsprite:girl.png:NO
 
 ================
 
-  Name: .CALLCODE
-
-  This action can be used to call functions (usually from static objects). Careful when using it to
-  call classes or functions that the VN system doesn't have access to! You may need to include header
-  files from certain places if you really want to use certain classes.
-
-  Parameters:
-
-      #1: The name of the class to call (string)
-
-      #2: The name of a static function to call (string)
-
-		#3: (OPTIONAL) The name of another function, PRESUMABLY a function that belongs to the class
-			instance that was returned by the function called in #2 (string)
-
-		#4: (OPTIONAL) A parameter to pass into the function called in #3 (string?)
-
-  Example: .CALLCODE:EKRecord:sharedRecord:flagNamed:times played
-
-================
-
   Name: .SWITCHSCRIPT
 
   Replaces a scene's script with a script loaded from another .PLIST file. This is useful if your script is

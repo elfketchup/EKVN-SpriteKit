@@ -128,19 +128,21 @@
 #define VNSceneViewNoSkipUntilTextShownKey      @"no skipping until text is shown" // Prevents skipping until the text is fully shown
 
 // Dictionary keys
-#define VNSceneSavedScriptInfoKey       @"script info"
-#define VNSceneSavedResourcesKey        @"saved resources"
-#define VNSceneMusicToPlayKey			@"music to play"
-#define VNSceneMusicShouldLoopKey       @"music should loop"
-#define VNSceneSpritesToShowKey			@"sprites to show"
-#define VNSceneSoundsToRemoveKey        @"sounds to remove"
-#define VNSceneMusicToRemoveKey         @"music to remove"
-#define VNSceneBackgroundToShowKey		@"background to show"
-#define VNSceneSpeakerNameToShowKey		@"speaker name to show"
-#define VNSceneSpeechToDisplayKey		@"speech to display"
-#define VNSceneShowSpeechKey            @"show speech"
-#define VNSceneBackgroundXKey           @"background x"
-#define VNSceneBackgroundYKey           @"background y"
+#define VNSceneSavedScriptInfoKey               @"script info"
+#define VNSceneSavedResourcesKey                @"saved resources"
+#define VNSceneMusicToPlayKey                   @"music to play"
+#define VNSceneMusicShouldLoopKey               @"music should loop"
+#define VNSceneSpritesToShowKey                 @"sprites to show"
+#define VNSceneSoundsToRemoveKey                @"sounds to remove"
+#define VNSceneMusicToRemoveKey                 @"music to remove"
+#define VNSceneBackgroundToShowKey              @"background to show"
+#define VNSceneSpeakerNameToShowKey             @"speaker name to show"
+#define VNSceneSpeechToDisplayKey               @"speech to display"
+#define VNSceneShowSpeechKey                    @"show speech"
+#define VNSceneBackgroundXKey                   @"background x"
+#define VNSceneBackgroundYKey                   @"background y"
+#define VNSceneTypewriterTextCanSkip            @"typewriter text can skip"
+#define VNSceneTypewriterTextSpeed              @"typewriter text speed"
 
 // UI "override" keys (used when you change things like font size/font name in the middle of a scene).
 // By default, any changes will be restored when a saved game is loaded, though the "override X from save"
@@ -230,6 +232,20 @@
     float spriteTransitionSpeed, speechTransitionSpeed, speakerTransitionSpeed;
     UIColor* buttonTouchedColors;
     UIColor* buttonUntouchedColors;
+    
+    // Typewriter style text
+    BOOL TWModeEnabled; // Off by default (standard EKVN text mode)
+    BOOL TWCanSkip; // Can the user skip ahead (and cut the text short) by tapping?
+    int TWSpeedInCharacters; // How many characters it should print per second
+    int TWSpeedInFrames;
+    int TWTimer; // Used to determine how many characters should be displayed (relative to the time/speed of displaying characters)
+    double TWSpeedInSeconds;
+    int TWNumberOfCurrentCharacters;
+    int TWPreviousNumberOfCurrentChars;
+    int TWNumberOfTotalCharacters;
+    NSString* TWCurrentText; // What's currently on the screen
+    NSString* TWFullText; // The entire line of text
+    DSMultilineLabelNode* TWInvisibleText; // Used because SpriteKit has weird ways of positioning/handling text
 }
 
 //@property (nonatomic, strong) VNScript* script;
@@ -259,6 +275,9 @@
 
 - (void)setEffectRunningFlag;
 - (void)clearEffectRunningFlag;
+
+- (void)updateTypewriterTextSettings; // Recalculates data (and whether or not to use typewriter speeds to begin with) (only called occasionally)
+- (void)updateTypewriterTextDisplay; // This handles the actual display of text (and this function can get called every frame)
 
 - (void)updateScriptInfo;
 - (void)createSafeSave;

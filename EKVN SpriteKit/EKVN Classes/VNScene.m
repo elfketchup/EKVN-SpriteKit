@@ -64,6 +64,19 @@ VNScene* theCurrentScene = nil;
     flags           = [[NSMutableDictionary alloc] initWithDictionary:[[[EKRecord sharedRecord] flags] copy]]; // Create independent copy of flag data
     noSkippingUntilTextIsShown = NO; // By default is set to NO, so it IS possible to skip text before it's shown
     
+    // Set default values for typewriter text mode
+    TWModeEnabled                   = NO; // Off by default (standard EKVN text mode)
+    TWSpeedInFrames                 = 0;
+    TWSpeedInSeconds                = 0.0;
+    TWNumberOfCurrentCharacters     = 0;
+    TWPreviousNumberOfCurrentChars  = 0;
+    TWNumberOfTotalCharacters       = 0;
+    TWCurrentText                   = @"";
+    TWFullText                      = @"";
+    TWTimer                         = 0;
+    TWSpeedInCharacters             = 60;
+    TWCanSkip                       = YES;
+    
     // Set default UI values
     fontSizeForSpeaker  = 0.0;
     fontSizeForSpeech   = 0.0;
@@ -254,6 +267,21 @@ VNScene* theCurrentScene = nil;
             [sprites setValue:sprite forKey:spriteFilename];
 		}
 	}
+    
+    // Load typewriter values
+    NSNumber* TWSpeedInCharsValue   = [record objectForKey:VNSceneTypewriterTextSpeed];
+    NSNumber* TWCanSkipValue        = [record objectForKey:VNSceneTypewriterTextCanSkip];
+    
+    // Handle loading typewriter data
+    if( TWSpeedInCharsValue != nil) {
+        TWSpeedInCharacters = [TWSpeedInCharsValue intValue];
+    }
+    if( TWCanSkipValue != nil ) {
+        TWCanSkip = [TWCanSkipValue boolValue];
+    }
+    
+    [self updateTypewriterTextSettings];
+
 }
 
 // Loads the default, hard-coded values for the view / UI settings dictionary.
@@ -301,6 +329,22 @@ VNScene* theCurrentScene = nil;
     
     // Load other settings
     [viewSettings setValue:@NO forKey:VNSceneViewNoSkipUntilTextShownKey];
+    
+    /*
+    // Load typewriter text mode (if there's any data for it)
+    NSNumber* TWIsEnabledValue = [viewSettings objectForKey:VNSceneTypewriterTextModeEnabledKey];
+    NSNumber* TWSpeedInCharsValue = [viewSettings objectForKey:VNSceneTypewriterSpeedInCharactersKey];
+    NSNumber* TWCanSkipValue = [viewSettings objectForKey:VNSceneTypewriterCanSkipTextKey];
+    if (TWIsEnabledValue != nil) {
+        TWModeEnabled = [TWIsEnabledValue boolValue];
+    }
+    if( TWSpeedInCharsValue != nil) {
+        TWSpeedInCharacters = [TWSpeedInCharsValue doubleValue];
+    }
+    if( TWCanSkipValue != nil ) {
+        TWCanSkip = [TWCanSkipValue boolValue];
+    }
+    [self updateTypewriterTextValues];*/
 }
 
 // Actually loads images and text for the UI (as opposed to just loading information ABOUT the UI)
@@ -398,6 +442,18 @@ VNScene* theCurrentScene = nil;
     speech.zPosition = VNSceneTextLayer;
     speech.name = VNSceneTagSpeechText;
     [speechBox addChild:speech];
+    
+    /** COPY TO TWINVISIBLE TEXT **/
+    TWInvisibleText = [DSMultilineLabelNode labelNodeWithFontNamed:[viewSettings objectForKey:VNSceneViewFontNameKey]];
+    TWInvisibleText.text = @" ";
+    TWInvisibleText.fontSize = speech.fontSize;
+    TWInvisibleText.paragraphWidth = speech.paragraphWidth;
+    TWInvisibleText.position = speech.position;
+    TWInvisibleText.horizontalAlignmentMode = speech.horizontalAlignmentMode;
+    TWInvisibleText.zPosition = speech.zPosition;
+    TWInvisibleText.alpha = 0.0; // make sure this really is invisible
+    //speechBox!.addChild(TWInvisibleText!)
+    [speechBox addChild:TWInvisibleText];
     
     // Part 3: Create speaker label
     // But first, figure out all the offsets and sizes.
@@ -556,6 +612,93 @@ VNScene* theCurrentScene = nil;
         [self removeAllChildren];
         
         NSLog(@"[VNScene] All child nodes have been removed.");
+    }
+}
+
+// MARK: - Typewriter text stuff
+
+// Updates data regarding speed (and whether or not typewriter mode should be enabled). This should only get called occasionally,
+// such as when this speed values are changed.
+- (void)updateTypewriterTextSettings
+{
+    if (TWSpeedInCharacters <= 0) {
+        TWModeEnabled = YES;
+        TWTimer = 0;
+    } else {
+        
+        TWModeEnabled = YES;
+        
+        // Calculate speed in seconds based on characters per second
+        double charsPerSecond = (double)TWSpeedInCharacters;
+        TWSpeedInSeconds = (60.0) / charsPerSecond; // at 60fps this is 60/characters-per-second
+        
+        double speedInFrames = (60.0) * TWSpeedInSeconds;
+        TWSpeedInFrames = (int)(speedInFrames);
+        TWTimer = 0; // This gets reset
+    }
+    
+    [record setValue:[NSNumber numberWithInt:TWSpeedInCharacters] forKey:VNSceneTypewriterTextSpeed];
+    [record setValue:[NSNumber numberWithBool:TWCanSkip] forKey:VNSceneTypewriterTextCanSkip];
+}
+
+// This gets called every frame to determine how to display labels when typewriter text is enabled.
+- (void)updateTypewriterTextDisplay
+{
+    if (TWSpeedInCharacters < 1) {
+        return;
+    }
+    
+    BOOL shouldRedrawText = NO; // Determines whether or not to go through the trouble of recalculating text node positions
+    
+    // Used to calculate how many characters to display (in each frame)
+    double currentChars = (double)TWNumberOfCurrentCharacters;
+    double charsPerSecond = (double)(TWSpeedInCharacters);
+    double charsPerFrame = (charsPerSecond / 60.0);
+    double c = currentChars + charsPerFrame;
+    
+    // Convert back to integer (from the more precise Double)
+    TWNumberOfCurrentCharacters = (int)(c);
+    
+    // Clamp excessive min-max values
+    if (TWNumberOfCurrentCharacters < 0) {
+        TWNumberOfCurrentCharacters = 0;
+    } else if (TWNumberOfCurrentCharacters > TWNumberOfTotalCharacters) {
+        TWNumberOfCurrentCharacters = TWNumberOfTotalCharacters;
+    }
+    
+    // The "previous number" counter is used to ensure that changes to the display are only made when it's necessary
+    // (in this case, when the value changes for good) instead of possibly every single frame.
+    if( TWNumberOfCurrentCharacters > TWPreviousNumberOfCurrentChars ) {
+        // Actually commit new values to display
+        int numberOfCharsToUse = TWNumberOfCurrentCharacters;
+        
+        TWCurrentText = [TWFullText substringToIndex:numberOfCharsToUse];
+        //let TWIndex: String.Index = advance(TWFullText.startIndex, numberOfCharsToUse)
+        //TWCurrentText = TWFullText.substringToIndex(TWIndex)
+        
+        if (speech != nil) {
+            speech.text = TWCurrentText;
+        }
+        
+        // Update "previous counter" with the new value
+        TWPreviousNumberOfCurrentChars = TWNumberOfCurrentCharacters;
+        shouldRedrawText = YES;
+    }
+    
+    if (shouldRedrawText == YES) {
+        // Also change the text position so it doesn't get all weird; TWInvisibleText is used as a guide for positioning
+        speech.size = TWInvisibleText.size;
+        speech.paragraphWidth = TWInvisibleText.paragraphWidth;
+        speech.horizontalAlignmentMode = TWInvisibleText.horizontalAlignmentMode;
+        speech.position = TWInvisibleText.position;
+        
+        CGFloat someX = TWInvisibleText.position.x;
+        CGFloat someY = TWInvisibleText.position.y;
+        
+        someX = someX + (speech.size.width * 0.5);
+        someY = someY - (speech.size.height * 0.5);
+        
+        speech.position = CGPointMake(someX, someY);
     }
 }
 
@@ -775,12 +918,40 @@ VNScene* theCurrentScene = nil;
             }
             
             if( noSkippingUntilTextIsShown == NO ){
-                [script advanceIndex]; // Move the script forward
+                
+                BOOL canSkip = YES;
+                
+                if (TWModeEnabled == YES && TWCanSkip == NO) {
+                    NSUInteger lengthOfTWCurrentText = [TWCurrentText length];
+                    NSUInteger lengthOfTWFullText = [TWFullText length];
+                    
+                    if (lengthOfTWCurrentText < lengthOfTWFullText) {
+                        canSkip = NO;
+                    }
+                }
+                
+                if (canSkip == YES) {
+                    [script advanceIndex]; // Move the script forward
+                }
             } else {
                 
                 // Only allow advancing/skipping if there's no text or if the opacity/alpha has reached 1.0
                 if( speech == nil || speech.text.length < 1 || speech.alpha >= 1.0 ) {
-                    [script advanceIndex];
+                    
+                    BOOL canSkip = YES;
+                    
+                    // Determine if typewriter text should block skipping
+                    if( TWModeEnabled == YES ) { // 1. Is TW mode on?
+                        if( TWCanSkip == NO ) { // 2. Is skipping disabled?
+                            if( TWCurrentText.length < TWFullText.length ) { // 3. Is is just NOT time yet?
+                                canSkip = NO; // Skipping is disabled!
+                            }
+                        }
+                    }
+                    
+                    if( canSkip == YES ) {
+                        [script advanceIndex];
+                    }
                 }
             }
             
@@ -855,6 +1026,23 @@ VNScene* theCurrentScene = nil;
             
             // Take care of normal operations
             [self runScript]; // Process script data
+            
+            if (TWModeEnabled == YES) {
+                // Update typewriter text
+                
+                /*
+                 if( TWTimer <= TWSpeedInFrames ) {
+                 TWTimer++;
+                 self.updateTypewriterTextDisplay()
+                 }*/
+                
+                if (TWNumberOfCurrentCharacters < TWNumberOfTotalCharacters) {
+                    TWTimer++;
+                    //self.updateTypewriterTextDisplay()
+                    [self updateTypewriterTextDisplay];
+                }
+            }
+            
             break;
             
         // Is an effect currently running? (this is normally when the "safe save" data comes into play)
@@ -1085,10 +1273,11 @@ VNScene* theCurrentScene = nil;
     }
     widthOfBox = workingArea.width;
     
+    [viewSettings objectForKey:nil];
+    
     //float verticalMargins = [[viewSettings objectForKey:VNSceneViewSpeechVerticalMarginsKey] floatValue];
     float horizontalMargins = [[viewSettings objectForKey:VNSceneViewSpeechHorizontalMarginsKey] floatValue];
     float speechXOffset = [[viewSettings objectForKey:VNSceneViewSpeechOffsetXKey] floatValue];
-    //float speechYOffset = [[viewSettings objectForKey:VNSceneViewSpeechOffsetYKey] floatValue];
     
     //NSLog(@"verticalMargins = %f, speechYOffset = %f", verticalMargins, speechYOffset);
     
@@ -1122,26 +1311,52 @@ VNScene* theCurrentScene = nil;
     // Check if the command is really just "display a regular line of text"
     if( type == VNScriptCommandSayLine ) {
         
-        // Speech opacity is set to zero, making it invisible. Remember, speech is supposed to "fade in"
-        // instead of instantly appearing, since an instant appearance can be visually jarring to players.
-        speech.alpha = 0.0;
-        [speech setText:parameter1]; // Copy over the text (while the text label is "invisble")
-        [record setValue:parameter1 forKey:VNSceneSpeechToDisplayKey]; // Copy text to save-game record
-        
-        // Now have the text fade into full visibility.
-        SKAction* fadeIn = [SKAction fadeInWithDuration:speechTransitionSpeed];
-        [speech runAction:fadeIn];
-        
-        // If the speech-box isn't visible (or at least not fully visible), then it should fade-in as well
-        if( speechBox.alpha < 0.9 ) {
+        if( TWModeEnabled == NO ) {
             
-            //CCActionFadeIn* fadeInSpeechBox = [CCActionFadeIn actionWithDuration:speechTransitionSpeed];
-            SKAction* fadeInSpeechBox = [SKAction fadeInWithDuration:speechTransitionSpeed];
-            [speechBox runAction:fadeInSpeechBox];
+            // Speech opacity is set to zero, making it invisible. Remember, speech is supposed to "fade in"
+            // instead of instantly appearing, since an instant appearance can be visually jarring to players.
+            speech.alpha = 0.0;
+            [speech setText:parameter1]; // Copy over the text (while the text label is "invisble")
+            [record setValue:parameter1 forKey:VNSceneSpeechToDisplayKey]; // Copy text to save-game record
+            
+            // Now have the text fade into full visibility.
+            SKAction* fadeIn = [SKAction fadeInWithDuration:speechTransitionSpeed];
+            [speech runAction:fadeIn];
+            
+            // If the speech-box isn't visible (or at least not fully visible), then it should fade-in as well
+            if( speechBox.alpha < 0.9 ) {
+                
+                //CCActionFadeIn* fadeInSpeechBox = [CCActionFadeIn actionWithDuration:speechTransitionSpeed];
+                SKAction* fadeInSpeechBox = [SKAction fadeInWithDuration:speechTransitionSpeed];
+                [speechBox runAction:fadeInSpeechBox];
+            }
+            
+            speech.anchorPoint = CGPointMake(0, 1.0);
+            speech.position = [self updatedTextPosition];
+        } else {
+            
+            NSString* parameter1String = [command objectAtIndex:1];
+            
+            // Reset counter
+            TWTimer                     = 0;
+            TWFullText                  = parameter1String;
+            TWCurrentText               = @"";
+            TWNumberOfCurrentCharacters = 0;
+            TWNumberOfTotalCharacters   = (int) [parameter1String length];
+            TWPreviousNumberOfCurrentChars = 0;
+            
+            [record setValue:parameter1String forKey:VNSceneSpeechToDisplayKey];
+            
+            speech.text = @" ";// parameter1AsString
+            speechBox.alpha = 1.0;
+            speech.anchorPoint = CGPointMake(0, 1.0);
+            speech.position = [self updatedTextPosition];
+            
+            TWInvisibleText.text = parameter1String;
+            TWInvisibleText.anchorPoint = CGPointMake(0, 1.0);
+            TWInvisibleText.position = [self updatedTextPosition];
+            TWInvisibleText.alpha = 0.0;
         }
-        
-        speech.anchorPoint = CGPointMake(0, 1.0);
-        speech.position = [self updatedTextPosition];
         
         return;
     }
@@ -2184,6 +2399,21 @@ VNScene* theCurrentScene = nil;
             [record setObject:@(fontSizeForSpeaker) forKey:VNSceneOverrideSpeakerSizeKey];
             speaker.anchorPoint = CGPointMake(0, 1.0);
             speaker.position = [self updatedSpeakerPosition];
+            
+        }break;
+            
+        case VNScriptCommandSetTypewriterText:
+        {
+            NSNumber* first = [command objectAtIndex:1];
+            NSNumber* second = [command objectAtIndex:2];
+            
+            TWSpeedInCharacters = [first intValue];
+            TWCanSkip = [second boolValue];
+            
+            //NSLog(@"set twspeedincharacters to %@", first);
+            //NSLog(@"set twscanskip to %@", second);
+            
+            [self updateTypewriterTextSettings];
             
         }break;
     
