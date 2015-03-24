@@ -17,6 +17,7 @@ VNScene* theCurrentScene = nil;
 @implementation VNScene
 
 //@synthesize script = script;
+@synthesize localSpriteAliases;
 
 #pragma - 
 #pragma mark Initialization
@@ -62,6 +63,8 @@ VNScene* theCurrentScene = nil;
     sprites         = [[NSMutableDictionary alloc] init];
     record          = [[NSMutableDictionary alloc] initWithDictionary:self.allSettings]; // Copy data to local dictionary
     flags           = [[NSMutableDictionary alloc] initWithDictionary:[[[EKRecord sharedRecord] flags] copy]]; // Create independent copy of flag data
+    //self.localSpriteAliases = [[NSMutableDictionary alloc] init];
+    self.localSpriteAliases = [[NSMutableDictionary alloc] initWithDictionary:[[[EKRecord sharedRecord] spriteAliases] copy]];
     noSkippingUntilTextIsShown = NO; // By default is set to NO, so it IS possible to skip text before it's shown
     
     // Set default values for typewriter text mode
@@ -74,7 +77,7 @@ VNScene* theCurrentScene = nil;
     TWCurrentText                   = @"";
     TWFullText                      = @"";
     TWTimer                         = 0;
-    TWSpeedInCharacters             = 60;
+    TWSpeedInCharacters             = 0;
     TWCanSkip                       = YES;
     
     // Set default UI values
@@ -251,20 +254,33 @@ VNScene* theCurrentScene = nil;
         // In theory, the process should be fast enough (and the number of sprites FEW enough) that the user shouldn't notice any delays.
 		for( NSDictionary* spriteData in savedSprites ) {
             
+            BOOL doesHaveAlias = YES; // default assumption
+            
             // Grab sprite data from dictionary
-            NSString* spriteFilename = [spriteData objectForKey:@"name"];
-            NSLog(@"[VNScene] Restoring saved sprite named: %@", spriteFilename);
+            NSString* nameOfSprite = [spriteData objectForKey:@"name"];
+            NSLog(@"[VNScene] Restoring saved sprite named: %@", nameOfSprite);
+            
+            // Check if there was a filename
+            NSString* filenameOfSprite = [spriteData objectForKey:@"filename"];
+            if( filenameOfSprite == nil ) {
+                doesHaveAlias = NO;
+                filenameOfSprite = nameOfSprite;
+            }
             
             // Load CCSprite object and set its coordinates
 			float spriteX = [[spriteData objectForKey:@"x"] floatValue]; // Load coordinates from dictionary
 			float spriteY = [[spriteData objectForKey:@"y"] floatValue];
-            SKSpriteNode* sprite    = [SKSpriteNode spriteNodeWithImageNamed:spriteFilename];
+            SKSpriteNode* sprite    = [SKSpriteNode spriteNodeWithImageNamed:filenameOfSprite];
 			sprite.position         = CGPointMake( spriteX, spriteY );
             sprite.zPosition        = VNSceneCharacterLayer;
             [self addChild:sprite];
             
             // Finally, add the sprite to the 'sprites' dictionary
-            [sprites setValue:sprite forKey:spriteFilename];
+            [sprites setValue:sprite forKey:nameOfSprite];
+            
+            if( doesHaveAlias == YES ) {
+                [self.localSpriteAliases setValue:filenameOfSprite forKey:nameOfSprite];
+            }
 		}
 	}
     
@@ -275,9 +291,11 @@ VNScene* theCurrentScene = nil;
     // Handle loading typewriter data
     if( TWSpeedInCharsValue != nil) {
         TWSpeedInCharacters = [TWSpeedInCharsValue intValue];
+        NSLog(@"[VNScene] DIAGNOSTIC: Typewriter Text speed in characters set to: %d", TWSpeedInCharacters);
     }
     if( TWCanSkipValue != nil ) {
         TWCanSkip = [TWCanSkipValue boolValue];
+        NSLog(@"[VNScene] DIAGNOSTIC: Typewriter Text skip flag set to: %d", TWCanSkip);
     }
     
     [self updateTypewriterTextSettings];
@@ -622,7 +640,7 @@ VNScene* theCurrentScene = nil;
 - (void)updateTypewriterTextSettings
 {
     if (TWSpeedInCharacters <= 0) {
-        TWModeEnabled = YES;
+        TWModeEnabled = NO;
         TWTimer = 0;
     } else {
         
@@ -705,6 +723,20 @@ VNScene* theCurrentScene = nil;
 #pragma mark -
 #pragma mark Misc and Utility
 
+// Used to retrieve potential sprite alias names from the local sprite alias dictionary
+- (NSString*)filenameOfSpriteAlias:(NSString*)someName
+{
+    NSString* filenameOfSprite = [self.localSpriteAliases objectForKey:someName];
+    // Check if the corresponding filename was NOT found in the alias list
+    if( filenameOfSprite == nil ) {
+        // In this case, just return the original name, which can be assumed to be an actual filename already
+        return [NSString stringWithString:someName];
+    }
+    
+    // Otherwise, assume that the filename was found
+    return [NSString stringWithString:filenameOfSprite];
+}
+
 // The set/clear effect-running-flag functions exist so that Cocos2D can call them after certain actions
 // (or sequences of actions) have been run. The "effect is running" flag is important, since it lets VNScene
 // know when it's safe (or unsafe) to do certain things (which might interrupt the effect that's being run).
@@ -746,6 +778,7 @@ VNScene* theCurrentScene = nil;
     // Check if the "safe save" exists; if it does, then it should be used instead of whatever the current data is.
     if( safeSave != nil ) {
     
+        [[[EKRecord sharedRecord] spriteAliases] addEntriesFromDictionary:[safeSave objectForKey:@"aliases"]];
         [[[EKRecord sharedRecord] flags] addEntriesFromDictionary:[safeSave objectForKey:@"flags"]];
         [dictToSave setObject:[safeSave objectForKey:@"record"] forKey:EKRecordActivityDataKey];
         [[EKRecord sharedRecord] setActivityDict:dictToSave];
@@ -763,6 +796,9 @@ VNScene* theCurrentScene = nil;
     // Load all flag data back to EKRecord. Remember that VNScene doesn't have a monopoly on flag data;
     // other classes and game systems can modify the flags as well! 
     [[EKRecord sharedRecord].flags addEntriesFromDictionary:flags];
+    
+    // Do the same with sprite aliases (which can also be manipulated by external classes)
+    [[EKRecord sharedRecord].spriteAliases addEntriesFromDictionary:self.localSpriteAliases];
     
     // Update script data and then load it into the activity dictionary.
     [self updateScriptInfo];                                        // Update all index and conversation data
@@ -788,6 +824,7 @@ VNScene* theCurrentScene = nil;
     
     // Create dictionary object
     safeSave = [[NSDictionary alloc] initWithObjectsAndKeys:[flags copy], @"flags",    // Holds flags before they were modified
+                                                            [self.localSpriteAliases copy], @"aliases",
                                                             record, @"record",         // Holds sprite data, UI data, etc.
                                                             [script info], VNSceneSavedScriptInfoKey, // Script/index/conversationd ata
                                                             nil];
@@ -824,9 +861,19 @@ VNScene* theCurrentScene = nil;
         NSNumber* spriteY = @(actualSprite.position.y);
         
         // Save relevant data (sprite name and coordinates) in a dictionary
-        NSDictionary* savedSpriteData = @{  @"name" : spriteName,
-                                            @"x"    : spriteX,
-                                            @"y"    : spriteY };
+        NSMutableDictionary* tempSpriteDictionary = [NSMutableDictionary dictionaryWithCapacity:3];
+        [tempSpriteDictionary setValue:spriteName forKey:@"name"];
+        [tempSpriteDictionary setValue:spriteX forKey:@"x"];
+        [tempSpriteDictionary setValue:spriteY forKey:@"y"];
+        
+        // Check to see if this has a different filename
+        NSString* filenameOfSprite = [self filenameOfSpriteAlias:spriteName];
+        // if the filenames are different, then it means that there is an alias value
+        if( [filenameOfSprite caseInsensitiveCompare:spriteName] != NSOrderedSame ) {
+            [tempSpriteDictionary setValue:filenameOfSprite forKey:@"filename"];
+        }
+        
+        NSDictionary* savedSpriteData = [NSDictionary dictionaryWithDictionary:tempSpriteDictionary];
         
         // Save dictionary data into the array (which will later be saved to a file)
         [spritesArray addObject:savedSpriteData];
@@ -1374,6 +1421,7 @@ VNScene* theCurrentScene = nil;
         case VNScriptCommandAddSprite: {
             
             NSString* spriteName = parameter1;
+            NSString* filenameOfSprite = [self filenameOfSpriteAlias:spriteName];
             BOOL appearAtOnce = [[command objectAtIndex:2] boolValue]; // Should the sprite show up at once, or fade in (like text does)
             
             if( sprites == nil ) {
@@ -1387,9 +1435,9 @@ VNScene* theCurrentScene = nil;
             
             // Try to load the sprite from an image in the app bundle
             //CCSprite* createdSprite = [CCSprite spriteWithImageNamed:spriteName]; // Loads from file; sprite-sheets not supported
-            SKSpriteNode* createdSprite = [SKSpriteNode spriteNodeWithImageNamed:spriteName];
+            SKSpriteNode* createdSprite = [SKSpriteNode spriteNodeWithImageNamed:filenameOfSprite];
             if( createdSprite == nil ) {
-                NSLog(@"[VNScene] ERROR: Could not load sprite named: %@", spriteName);
+                NSLog(@"[VNScene] ERROR: Could not load sprite named: %@", filenameOfSprite);
                 return;
             }
             
@@ -2414,6 +2462,23 @@ VNScene* theCurrentScene = nil;
             //NSLog(@"set twscanskip to %@", second);
             
             [self updateTypewriterTextSettings];
+            
+        }break;
+            
+        case VNScriptCommandSetSpriteAlias:
+        {
+            NSString* aliasParameter = [command objectAtIndex:1];
+            NSString* filenameParameter = [command objectAtIndex:2];
+            
+            if( self.localSpriteAliases == nil ) {
+                self.localSpriteAliases = [[NSMutableDictionary alloc] init];
+            }
+            
+            if( [filenameParameter caseInsensitiveCompare:VNScriptNilValue] == NSOrderedSame ) {
+                [self.localSpriteAliases removeObjectForKey:aliasParameter]; // remove data for this alias
+            } else {
+                [self.localSpriteAliases setValue:filenameParameter forKey:aliasParameter];
+            }
             
         }break;
     

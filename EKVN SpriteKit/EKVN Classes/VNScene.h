@@ -255,6 +255,24 @@
 @property BOOL wasJustLoadedFromSave; // Useful because of some weird saving/loading quirks that popped up with .SYSTEMCALL:AUTOSAVE
 @property BOOL popSceneWhenDone; // Determines whether VNScene should ask CCDirector to pop the top-most scene when the script finishes.
 
+// Sprite aliases are for when you want to load a sprite but don't necessarily want to load a specific file
+// (or perhaps don't know which is the right file to load). Instead you can (dynamically) assign a filename
+// to a sprite "alias," and when you load the alias, you actually wind up loading image data from that
+// (abstracted) filename.
+//
+// An example:
+//   1. Say you want to display the main character, but due to certain circumstances, you don't know which character
+//      the player chose to be the main character.
+//
+//   2. If the player chooses to play as Harry, assign "harry.png" to the "hero" alias. If the player wants to play
+//      as Neville, instead assign "neville.png" to the "hero" alias.
+//
+//   3. Create the main character's sprite by loading wahtever the value of "hero" is. Whichever the player chose
+//      will appear! You only had to assign a value once, and now you never have to worry whether to use "harry.png" or
+//      "neville.png" again. (in theory)
+//
+@property (nonatomic, strong) NSMutableDictionary* localSpriteAliases;
+
 + (VNScene*)currentVNScene;
 
 + (id)sceneWithSize:(CGSize)theSize andSettings:(NSDictionary*)settings;

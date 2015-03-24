@@ -74,6 +74,10 @@
     NSMutableDictionary* tempFlags = [[NSMutableDictionary alloc] initWithObjectsAndKeys:@"dummy value", @"dummy key", nil];
     [tempRecord setValue:tempFlags forKey:EKRecordFlagsKey]; // Load the flags dictionary into the record
     
+    // Create dummy sprite aliases
+    NSMutableDictionary* tempAliases = [[NSMutableDictionary alloc] initWithObjectsAndKeys:@"dummy sprite alias value", @"dummy alias key", nil];
+    [tempRecord setValue:tempAliases forKey:EKRecordSpriteAliasesKey];
+    
     return [NSDictionary dictionaryWithDictionary:tempRecord];
 }
 
@@ -130,6 +134,27 @@
     // Flags will only get updated if the dictionary is valid
     if( updatedFlags ) {
         [record setValue:updatedFlags forKey:EKRecordFlagsKey];
+    }
+}
+
+- (NSMutableDictionary*)spriteAliases
+{
+    if( record == nil ) {
+        return nil;
+    }
+    
+    return [record objectForKey:EKRecordSpriteAliasesKey];
+}
+
+- (void)setSpriteAliases:(NSMutableDictionary *)updatedAliases
+{
+    if( record == nil ) {
+        NSLog(@"[EKRecord] Attempted to access sprite aliases, but no record existed. Autogenerating record...");
+        record = [[NSMutableDictionary alloc] initWithDictionary:[self emptyRecord]];
+    }
+    
+    if( updatedAliases != nil ) {
+        [record setValue:updatedAliases forKey:EKRecordSpriteAliasesKey];
     }
 }
 
@@ -467,6 +492,51 @@
     }
     
     return self;
+}
+
+#pragma mark - Sprite Aliases
+
+- (void)resetAllSpriteAliases
+{
+    NSMutableDictionary* dummyAliases = [[NSMutableDictionary alloc] init];
+    [dummyAliases setValue:@"dummy sprite alias value" forKey:@"dummy alias key"];
+    
+    [self setSpriteAliases:dummyAliases];
+}
+
+- (void)addExistingSpriteAliases:(NSDictionary*)existingAliases
+{
+    if( existingAliases == nil || existingAliases.count < 1 ) {
+        return;
+    }
+    
+    if( record == nil ) {
+        [self startNewRecord];
+    }
+    
+    [[self spriteAliases] addEntriesFromDictionary:existingAliases];
+}
+
+- (void)setSpriteAlias:(NSString*)nameOfAlias toValue:(NSString*)updatedValue
+{
+    if( nameOfAlias == nil || updatedValue == nil ) {
+        return;
+    }
+    
+    if( record == nil ) {
+        [self startNewRecord];
+    }
+    
+    [[self spriteAliases] setValue:updatedValue forKey:nameOfAlias];
+}
+
+- (NSString*)spriteAliasNamed:(NSString*)nameOfAlias
+{
+    if( record == nil ) {
+        return nil;
+    }
+    
+    return [[self spriteAliases] objectForKey:nameOfAlias];
 }
 
 #pragma mark - Flags

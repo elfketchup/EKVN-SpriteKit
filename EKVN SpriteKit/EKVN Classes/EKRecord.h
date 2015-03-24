@@ -80,6 +80,7 @@
 #define EKRecordCurrentScoreKey         @"current score"        // NSUInteger of the player's current score
 #define EKRecordFlagsKey                @"flag data"            // Key for a dictionary of "flag" data
 #define EKRecordDateSavedAsString       @"date saved as string" // A string with a more human-readable version of the NSDate object
+#define EKRecordSpriteAliasesKey        @"sprite aliases"       // stores all sprite aliases in use by the game
 
 // Keys for activity data
 #define EKRecordCurrentActivityDictKey  @"current activity" // Used to locate the activity data in the User Defaults
@@ -113,6 +114,9 @@
 - (NSMutableDictionary*)flags;
 - (void)setFlags:(NSMutableDictionary*)updatedFlags;
 
+- (NSMutableDictionary*)spriteAliases;
+- (void)setSpriteAliases:(NSMutableDictionary*)updatedAliases;
+
 - (void)setHighScore:(NSUInteger)highScoreValue;
 - (NSUInteger)highScore;
 - (void)setCurrentScore:(NSUInteger)scoreValue;
@@ -128,6 +132,13 @@
 - (NSArray*)arrayOfUsedSlotNumbers; // Returns array of all the slot numbers that have been saved to thus far
 - (void)addToUsedSlotNumbers:(NSUInteger)slotNumber; // Adds a particular slot number to the "used slots" array
 - (BOOL)slotNumberHasBeenUsed:(NSUInteger)slotNumber; // Checks if a particular slot has been used
+
+#pragma mark Sprite Alias functions
+
+- (void)resetAllSpriteAliases;
+- (void)addExistingSpriteAliases:(NSDictionary*)existingAliases;
+- (void)setSpriteAlias:(NSString*)nameOfAlias toValue:(NSString*)updatedValue;
+- (NSString*)spriteAliasNamed:(NSString*)nameOfAlias;
 
 #pragma mark Flag functions
 

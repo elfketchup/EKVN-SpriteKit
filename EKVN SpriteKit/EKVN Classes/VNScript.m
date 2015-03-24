@@ -1351,6 +1351,29 @@
         
         type = @VNScriptCommandSetTypewriterText;
         analyzedArray = @[type, timeNumber, skipNumber];
+        
+    } else if( [action caseInsensitiveCompare:VNScriptStringSetSpriteAlias] == NSOrderedSame ) {
+        
+        // Function definition
+        //
+        //  Name: .SETSPRITEALIAS
+        //
+        //  Assigns a filename to a particular sprite alias. Creates the that sprite alias if none exists.
+        //
+        //  Parameters:
+        //
+        //      #1: The sprite alias.
+        //
+        //      #2: The filename to use.
+        //
+        //  Example: .SETSPRITEALIAS:hero:harry.png
+        //
+        
+        NSString* aliasParameter = [command objectAtIndex:1];
+        NSString* filenameParameter = [command objectAtIndex:2];
+        
+        type = @VNScriptCommandSetSpriteAlias;
+        analyzedArray = @[type, aliasParameter, filenameParameter];
     }
     
     return analyzedArray;
