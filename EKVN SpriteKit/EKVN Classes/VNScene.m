@@ -78,7 +78,7 @@ VNScene* theCurrentScene = nil;
     TWFullText                      = @"";
     TWTimer                         = 0;
     TWSpeedInCharacters             = 0;
-    TWCanSkip                       = YES;
+    TWCanSkip                       = NO;
     
     // Set default UI values
     fontSizeForSpeaker  = 0.0;
@@ -974,6 +974,11 @@ VNScene* theCurrentScene = nil;
                     
                     if (lengthOfTWCurrentText < lengthOfTWFullText) {
                         canSkip = NO;
+                        
+                        // Forcibly show the entire line... sort of.
+                        if( TWNumberOfTotalCharacters > 1 ) {
+                            TWNumberOfCurrentCharacters = TWNumberOfTotalCharacters - 1;
+                        }
                     }
                 }
                 

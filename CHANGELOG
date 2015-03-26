@@ -1,3 +1,6 @@
+version 1.0.5 Mar-25-2015
+. [FIX] Fixed the way Typewriter Text gets displayed when the user taps on the screen as the text is gradually appearing.
+
 version 1.0.4 Mar-24-2015
 . [NEW] Added support for Sprite Alias feature, using the .SETSPRITEALIAS script command. The basic idea behind Sprite Aliases is that you might have multiple images for the same character, but exactly which image is the "correct" one to use at any given time may change due to a number of factors (including player choice). Rather than manually program multiple conditional statements for every possible scenario, you just create a single sprite alias (such as "main_character") and change which filename is attached to it when necessary (for example, setting sprite alias "main_character" to a value of "main_character_sad.png" or "main_character_happy.png"). Instead of having to deal with multiple possible filenames, you only have to deal with the sprite alias.
 
