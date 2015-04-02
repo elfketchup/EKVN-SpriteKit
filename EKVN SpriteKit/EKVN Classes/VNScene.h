@@ -141,8 +141,11 @@
 #define VNSceneShowSpeechKey                    @"show speech"
 #define VNSceneBackgroundXKey                   @"background x"
 #define VNSceneBackgroundYKey                   @"background y"
+#define VNSceneCinematicTextSpeedKey            @"cinematic text speed"
+#define VNSceneCinematicTextInputAllowedKey     @"cinematic text input allowed"
 #define VNSceneTypewriterTextCanSkip            @"typewriter text can skip"
 #define VNSceneTypewriterTextSpeed              @"typewriter text speed"
+#define VNSceneSavedOverriddenSpeechboxKey      @"overridden speechbox" // used to store speechbox sprites modified by .SETSPEECHBOX in saves
 
 // UI "override" keys (used when you change things like font size/font name in the middle of a scene).
 // By default, any changes will be restored when a saved game is loaded, though the "override X from save"
@@ -233,6 +236,12 @@
     UIColor* buttonTouchedColors;
     UIColor* buttonUntouchedColors;
     
+    // Cinematic text
+    double cinematicTextSpeed; // The speed at which text progresses without user input
+    BOOL cinematicTextInputAllowed; // Whether or not user input can still be allowed
+    int cinematicTextSpeedInFrames; // The speed in frames
+    int cinematicTextCounter; // Used to keep track of current frames
+    
     // Typewriter style text
     BOOL TWModeEnabled; // Off by default (standard EKVN text mode)
     BOOL TWCanSkip; // Can the user skip ahead (and cut the text short) by tapping?
@@ -293,6 +302,9 @@
 
 - (void)setEffectRunningFlag;
 - (void)clearEffectRunningFlag;
+
+- (void)updateCinematicTextValues;
+- (BOOL)cinematicTextAllowsUpdate; // Also returns YES if cinematic text is disabled
 
 - (void)updateTypewriterTextSettings; // Recalculates data (and whether or not to use typewriter speeds to begin with) (only called occasionally)
 - (void)updateTypewriterTextDisplay; // This handles the actual display of text (and this function can get called every frame)

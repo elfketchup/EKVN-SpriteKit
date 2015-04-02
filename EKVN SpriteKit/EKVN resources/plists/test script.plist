@@ -26,6 +26,7 @@
 		<string>Hello.</string>
 		<string>.SETBACKGROUND:pond.png</string>
 		<string>Hey, a background!</string>
+		<string>.SETSPEECHBOX:rtalkbox.png:2.0</string>
 		<string>Also, I&apos;m going to change the font name.</string>
 		<string>.SETSPEECHFONT:Courier New</string>
 		<string>How does this look?</string>

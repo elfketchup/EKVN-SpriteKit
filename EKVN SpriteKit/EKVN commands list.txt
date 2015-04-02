@@ -20,7 +20,7 @@ Example: .addsprite:girl.png:NO
 
   Name: .ALIGNSPRITE
 
-  Aligns a particular sprite in either the center, l.eft, or right ends of the screen. This is done
+  Aligns a particular sprite in either the center, left, or right ends of the screen. This is done
   by finding the center of the sprite and setting the X coordinate to either 25% of the screen's
   width (on the iPhone 4S, this is 480*0.25 or 120), 50% (the middle), or 75% (the right).
 
@@ -268,8 +268,6 @@ Example: .addsprite:girl.png:NO
 
   Example: .PLAYMUSIC:LevelUpper.mp3:NO
 
-  (To stop music: .PLAYMUSIC:nil)
-
 
 ================
 
@@ -434,6 +432,27 @@ Example: .addsprite:girl.png:NO
 
 ================
 
+  Name: .CALLCODE
+
+  This action can be used to call functions (usually from static objects). Careful when using it to
+  call classes or functions that the VN system doesn't have access to! You may need to include header
+  files from certain places if you really want to use certain classes.
+
+  Parameters:
+
+      #1: The name of the class to call (string)
+
+      #2: The name of a static function to call (string)
+
+		#3: (OPTIONAL) The name of another function, PRESUMABLY a function that belongs to the class
+			instance that was returned by the function called in #2 (string)
+
+		#4: (OPTIONAL) A parameter to pass into the function called in #3 (string?)
+
+  Example: .CALLCODE:EKRecord:sharedRecord:flagNamed:times played
+
+================
+
   Name: .SWITCHSCRIPT
 
   Replaces a scene's script with a script loaded from another .PLIST file. This is useful if your script is
@@ -494,3 +513,50 @@ Example: .addsprite:girl.png:NO
       #1: Font size (float)
 
   Example: .SETSPEECHFONTSIZE:18.0
+
+================
+
+  Name: .SETCINEMATICTEXT
+
+  Sets (or disables) "cinematic text," in which text or dialogue proceeds without any input
+  from the player.
+
+  Parameters:
+
+      #1: The time it takes (in seconds) to get to the next line of text/dialogue. (double)
+          (Setting this to zero (or less) DISABLES cinematic text mode.)
+
+      #2: Whether the user can still skip ahead by tapping the screen (BOOL) (OPTIONAL)
+          (default value is NO)
+
+  Example: .SETCINEMATICTEXT:5.0:YES
+
+================
+
+  Name: .SETTYPEWRITERTEXT
+
+  Sets or disables "typewriter text" mode, in which each character of text/dialogue appears
+  one at a time (though usually still very quickly).
+
+  Parameters:
+
+      #1: How many characters it should print per second (Integer)
+          (setting this to zero disables typewriter text mode)
+
+      #2: Whether the user can still skip ahead by tapping the screen (BOOL) (default value is NO)
+
+  Example: .SETTYPEWRITERTEXT:30:NO
+
+================
+
+  Name: .SETSPEECHBOX
+
+  Dynamically switches to a different speechbox sprite.
+
+  Parameters:
+
+      #1: Name of speechbox sprite to use (string)
+
+      #2: Duration of transition (in seconds) (default is 0, which is instant)
+
+  Example: .SETSPEECHBOX:alternate_box.png:1.0

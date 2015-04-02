@@ -67,6 +67,12 @@ VNScene* theCurrentScene = nil;
     self.localSpriteAliases = [[NSMutableDictionary alloc] initWithDictionary:[[[EKRecord sharedRecord] spriteAliases] copy]];
     noSkippingUntilTextIsShown = NO; // By default is set to NO, so it IS possible to skip text before it's shown
     
+    // Set default values for cinematic text
+    cinematicTextSpeed          = 0.0;
+    cinematicTextInputAllowed   = YES;
+    cinematicTextCounter        = 0;
+    cinematicTextSpeedInFrames  = 0;
+    
     // Set default values for typewriter text mode
     TWModeEnabled                   = NO; // Off by default (standard EKVN text mode)
     TWSpeedInFrames                 = 0;
@@ -182,10 +188,13 @@ VNScene* theCurrentScene = nil;
 	NSString* savedBackground   = [record objectForKey:VNSceneBackgroundToShowKey];
 	NSString* savedSpeakerName  = [record objectForKey:VNSceneSpeakerNameToShowKey];
 	NSString* savedSpeech       = [record objectForKey:VNSceneSpeechToDisplayKey];
+    NSString* savedSpeechbox    = [record objectForKey:VNSceneSavedOverriddenSpeechboxKey];
     NSNumber* showSpeechKey     = [record objectForKey:VNSceneShowSpeechKey];
     NSNumber* musicShouldLoop   = [record objectForKey:VNSceneMusicShouldLoopKey];
     NSNumber* savedBackgroundX  = [record objectForKey:VNSceneBackgroundXKey];
     NSNumber* savedBackgroundY  = [record objectForKey:VNSceneBackgroundYKey];
+    NSNumber* CTextSpeed        = [record objectForKey:VNSceneCinematicTextSpeedKey];
+    NSNumber* CTextInputAllowed = [record objectForKey:VNSceneCinematicTextInputAllowedKey];
     CGSize screenSize           = EKScreenSizeInPoints(); // Screensize is loaded to help position UI elements
     
     // This determines whether or not the speechbox will be shown. By default, the speechbox is hidden
@@ -283,6 +292,43 @@ VNScene* theCurrentScene = nil;
             }
 		}
 	}
+    
+    if( savedSpeechbox ) {
+        float boxToBottomMargin = 0;
+        float widthOfScreen = EKScreenSizeInPoints().width;
+        NSArray* originalChildren = [speechBox children];
+        
+        if( viewSettings ) {
+            boxToBottomMargin = [[viewSettings objectForKey:VNSceneViewSpeechBoxOffsetFromBottomKey] floatValue];
+        }
+        
+        if( speechBox ) {
+            [speechBox removeFromParent];
+        }
+        
+        speechBox               = [SKSpriteNode spriteNodeWithImageNamed:savedSpeechbox];
+        speechBox.position      = CGPointMake( widthOfScreen * 0.5, (speechBox.frame.size.height * 0.5) + boxToBottomMargin );
+        speechBox.zPosition     = VNSceneUILayer;
+        speechBox.name          = VNSceneTagSpeechBox;
+        [self addChild:speechBox];
+        
+        // add children from "old" speech box
+        if( originalChildren != nil && originalChildren.count > 0 ) {
+            for( SKNode* someChild in originalChildren ) {
+                [speechBox addChild:someChild];
+            }
+        }
+    }
+    
+    // Cinematic text
+    if( CTextSpeed != nil ) {
+        cinematicTextSpeed = [CTextSpeed doubleValue];
+    }
+    if( CTextInputAllowed != nil ) {
+        cinematicTextInputAllowed = [CTextInputAllowed boolValue];
+    }
+    
+    [self updateCinematicTextValues];
     
     // Load typewriter values
     NSNumber* TWSpeedInCharsValue   = [record objectForKey:VNSceneTypewriterTextSpeed];
@@ -471,6 +517,7 @@ VNScene* theCurrentScene = nil;
     TWInvisibleText.zPosition = speech.zPosition;
     TWInvisibleText.alpha = 0.0; // make sure this really is invisible
     //speechBox!.addChild(TWInvisibleText!)
+    TWInvisibleText.name = @"TWInvisibleText";
     [speechBox addChild:TWInvisibleText];
     
     // Part 3: Create speaker label
@@ -720,6 +767,51 @@ VNScene* theCurrentScene = nil;
     }
 }
 
+// MARK: - Cinematic text
+
+- (void)updateCinematicTextValues
+{
+    // Check if cinematic text is (or should be) disabled
+    if( cinematicTextSpeed <= 0.0 ) {
+        cinematicTextCounter = 0;
+        cinematicTextInputAllowed = YES;
+        cinematicTextSpeedInFrames = 0;
+    } else {
+        int fpsCount = 60;
+        //double fpsAsDouble = 60.0;
+        double result = fpsCount * cinematicTextSpeed;
+        cinematicTextSpeedInFrames = (int)result;
+        cinematicTextCounter = 0; // This gets reset
+    }
+    
+    // Update record with cinematic text values
+    [record setValue:@(cinematicTextSpeed) forKey:VNSceneCinematicTextSpeedKey];
+    [record setValue:@(cinematicTextInputAllowed) forKey:VNSceneCinematicTextInputAllowedKey];
+    
+    // Diagnostics
+    NSLog(@"[VNScene] Cinematic text speed: %f (in frames: %d). Input allowed: %d",
+          cinematicTextSpeed, cinematicTextSpeedInFrames, cinematicTextInputAllowed);
+}
+
+- (BOOL)cinematicTextAllowsUpdate
+{
+    // First, check if cinematic text is disabled, or if it allows input anyway
+    if( cinematicTextSpeed <= 0.0 || cinematicTextSpeedInFrames <= 0 ){
+        return YES;
+    }
+    if( cinematicTextInputAllowed == YES ) {
+        return YES;
+    }
+    
+    // Check if the "right time" has been reached
+    if( cinematicTextCounter >= cinematicTextSpeedInFrames ) {
+        cinematicTextCounter = 0; // Reset
+        return YES;
+    }
+    
+    return NO; // Otherwise, it's not allowed
+}
+
 #pragma mark -
 #pragma mark Misc and Utility
 
@@ -965,30 +1057,7 @@ VNScene* theCurrentScene = nil;
             }
             
             if( noSkippingUntilTextIsShown == NO ){
-                
-                BOOL canSkip = YES;
-                
-                if (TWModeEnabled == YES && TWCanSkip == NO) {
-                    NSUInteger lengthOfTWCurrentText = [TWCurrentText length];
-                    NSUInteger lengthOfTWFullText = [TWFullText length];
-                    
-                    if (lengthOfTWCurrentText < lengthOfTWFullText) {
-                        canSkip = NO;
-                        
-                        // Forcibly show the entire line... sort of.
-                        if( TWNumberOfTotalCharacters > 1 ) {
-                            TWNumberOfCurrentCharacters = TWNumberOfTotalCharacters - 1;
-                        }
-                    }
-                }
-                
-                if (canSkip == YES) {
-                    [script advanceIndex]; // Move the script forward
-                }
-            } else {
-                
-                // Only allow advancing/skipping if there's no text or if the opacity/alpha has reached 1.0
-                if( speech == nil || speech.text.length < 1 || speech.alpha >= 1.0 ) {
+                if( [self cinematicTextAllowsUpdate] == YES ) {
                     
                     BOOL canSkip = YES;
                     
@@ -997,12 +1066,39 @@ VNScene* theCurrentScene = nil;
                         if( TWCanSkip == NO ) { // 2. Is skipping disabled?
                             if( TWCurrentText.length < TWFullText.length ) { // 3. Is is just NOT time yet?
                                 canSkip = NO; // Skipping is disabled!
+                                
+                                // Forcibly show the entire line... sort of.
+                                if( TWNumberOfTotalCharacters > 1 ) {
+                                    TWNumberOfCurrentCharacters = TWNumberOfTotalCharacters - 1;
+                                }
                             }
                         }
                     }
                     
                     if( canSkip == YES ) {
-                        [script advanceIndex];
+                        [script advanceIndex]; // Move the script forward
+                    }
+                }
+            } else {
+                
+                // Only allow advancing/skipping if there's no text or if the opacity/alpha has reached 1.0
+                if( speech == nil || speech.text.length < 1 || speech.alpha >= 1.0 ) {
+                    if( [self cinematicTextAllowsUpdate] == YES ) {
+                        
+                        BOOL canSkip = YES;
+                        
+                        // Determine if typewriter text should block skipping
+                        if( TWModeEnabled == YES ) { // 1. Is TW mode on?
+                            if( TWCanSkip == NO ) { // 2. Is skipping disabled?
+                                if( TWCurrentText.length < TWFullText.length ) { // 3. Is is just NOT time yet?
+                                    canSkip = NO; // Skipping is disabled!
+                                }
+                            }
+                        }
+                        
+                        if( canSkip == YES ) {
+                            [script advanceIndex];
+                        }
                     }
                 }
             }
@@ -1079,18 +1175,18 @@ VNScene* theCurrentScene = nil;
             // Take care of normal operations
             [self runScript]; // Process script data
             
+            if( cinematicTextSpeed > 0.0 ) {
+                cinematicTextCounter++;
+                
+                if( cinematicTextCounter >= cinematicTextSpeedInFrames ) {
+                    [script advanceIndex];
+                    cinematicTextCounter = 0;
+                }
+            }
+            
             if (TWModeEnabled == YES) {
-                // Update typewriter text
-                
-                /*
-                 if( TWTimer <= TWSpeedInFrames ) {
-                 TWTimer++;
-                 self.updateTypewriterTextDisplay()
-                 }*/
-                
                 if (TWNumberOfCurrentCharacters < TWNumberOfTotalCharacters) {
                     TWTimer++;
-                    //self.updateTypewriterTextDisplay()
                     [self updateTypewriterTextDisplay];
                 }
             }
@@ -2455,6 +2551,14 @@ VNScene* theCurrentScene = nil;
             
         }break;
             
+        case VNScriptCommandSetCinematicText:
+        {
+            cinematicTextSpeed = [parameter1 doubleValue];
+            cinematicTextInputAllowed = [[command objectAtIndex:2] boolValue];
+            [self updateCinematicTextValues];
+            
+        }break;
+            
         case VNScriptCommandSetTypewriterText:
         {
             NSNumber* first = [command objectAtIndex:1];
@@ -2467,6 +2571,86 @@ VNScene* theCurrentScene = nil;
             //NSLog(@"set twscanskip to %@", second);
             
             [self updateTypewriterTextSettings];
+            
+        }break;
+            
+        case VNScriptCommandSetSpeechbox:
+        {
+            double duration = [[command objectAtIndex:2] doubleValue];
+            
+            // prepare positioning data
+            float boxToBottomMargin = 0;
+            float widthOfScreen = EKScreenSizeInPoints().width;
+            if( viewSettings ) {
+                boxToBottomMargin = [[viewSettings objectForKey:VNSceneViewSpeechBoxOffsetFromBottomKey] floatValue];
+            }
+            
+            if( duration <= 0.0 ) {
+                // switch instantly
+                NSArray* originalChildren = [speechBox children];
+                [speechBox removeFromParent];
+                //speechBox = [CCSprite spriteWithImageNamed:parameter1];
+                speechBox = [SKSpriteNode spriteNodeWithImageNamed:parameter1];
+                speechBox.position = CGPointMake( widthOfScreen * 0.5, (speechBox.frame.size.height * 0.5) + boxToBottomMargin );
+                speechBox.alpha = 1.0;
+                speechBox.zPosition = VNSceneUILayer;
+                speechBox.name = VNSceneTagSpeechBox;
+                [self addChild:speechBox];
+                //[self addChild:speechBox z:VNSceneUILayer name:VNSceneTagSpeechBox];
+                
+                for( SKNode* aChild in originalChildren ) {
+                    [speechBox addChild:aChild];
+                    //NSLog(@"d: child z is %f and name is %@", aChild.zPosition, aChild.name);
+                }
+                
+            } else {
+                
+                // switch gradually
+                [self createSafeSave];
+                [self setEffectRunningFlag];
+                
+                NSArray* speechBoxChildren = [speechBox children];
+                
+                // create fake placeholder speechbox that looks like the original
+                //CCSprite* fakeSpeechbox = [CCSprite spriteWithTexture:speechBox.texture];
+                SKSpriteNode* fakeSpeechbox = [SKSpriteNode spriteNodeWithTexture:speechBox.texture];
+                fakeSpeechbox.position = speechBox.position;
+                fakeSpeechbox.zPosition = speechBox.zPosition;
+                [self addChild:fakeSpeechbox];
+                
+                // get rid of the original speechbox and replace it with a new and invisible speechbox
+                [speechBox removeFromParent];
+                speechBox = [SKSpriteNode spriteNodeWithImageNamed:parameter1];
+                speechBox.position = CGPointMake( widthOfScreen * 0.5, (speechBox.frame.size.height * 0.5) + boxToBottomMargin );
+                speechBox.alpha = 0.0;
+                speechBox.zPosition = VNSceneUILayer;
+                speechBox.name = VNSceneTagSpeechBox;
+                [self addChild:speechBox];
+                
+                for( SKNode* aChild in speechBoxChildren ) {
+                    [speechBox addChild:aChild];
+                    // cause each child node to gradually fade out and fade back in so it looks like it's doing it in time
+                    // with the speechboxes.
+                    SKAction* fadeOutChild = [SKAction fadeOutWithDuration:(duration * 0.5)];
+                    SKAction* fadeInChild = [SKAction fadeInWithDuration:(duration * 0.5)];
+                    SKAction* sequenceForChild = [SKAction sequence:@[fadeOutChild, fadeInChild]];
+                    [aChild runAction:sequenceForChild];
+                }
+                
+                // fade out the fake speechbox
+                SKAction* fadeOut = [SKAction fadeOutWithDuration:(duration * 0.5)];
+                [fakeSpeechbox runAction:fadeOut];
+                
+                // fade in the new "real" speechbox
+                SKAction* fadeIn = [SKAction fadeOutWithDuration:(duration * 0.5)];
+                SKAction* delay = [SKAction waitForDuration:(duration * 0.5)];
+                SKAction* callFunc = [SKAction performSelector:@selector(clearEffectRunningFlag) onTarget:self];
+                SKAction* delayedFadeInSequence = [SKAction sequence:@[delay, fadeIn, callFunc]];
+                
+                [speechBox runAction:delayedFadeInSequence];
+            }
+            
+            [record setValue:parameter1 forKey:VNSceneSavedOverriddenSpeechboxKey];
             
         }break;
             

@@ -1,3 +1,6 @@
+version 1.0.6 Apr-01-2015
+. [NEW] Added .SETSPEECHBOX script command to dynamically change the speechbox sprite on the fly.
+
 version 1.0.5 Mar-25-2015
 . [FIX] Fixed the way Typewriter Text gets displayed when the user taps on the screen as the text is gradually appearing
 
