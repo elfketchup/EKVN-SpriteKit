@@ -40,6 +40,10 @@
 		<string>.SETSPRITEALIAS:matsuri:matsuri_close.png</string>
 		<string>.ADDSPRITE:matsuri</string>
 		<string>Suddenly, an anime girl appears!</string>
+		<string>.FLIPSPRITE:matsuri:1</string>
+		<string>Well, she&apos;s been turned around now.</string>
+		<string>.FLIPSPRITE:matsuri</string>
+		<string>And now she&apos;s back to normal.</string>
 		<string>.systemcall:autosave</string>
 		<string>.SETSPEAKER:Matsuri</string>
 		<string>Hi, my name is Matsuri.</string>

@@ -279,8 +279,12 @@ VNScene* theCurrentScene = nil;
             // Load CCSprite object and set its coordinates
 			float spriteX = [[spriteData objectForKey:@"x"] floatValue]; // Load coordinates from dictionary
 			float spriteY = [[spriteData objectForKey:@"y"] floatValue];
+            float scaleX = [[spriteData objectForKey:@"scale x"] floatValue]; // load scaling data (for inverted sprites)
+            float scaleY = [[spriteData objectForKey:@"scale y"] floatValue];
             SKSpriteNode* sprite    = [SKSpriteNode spriteNodeWithImageNamed:filenameOfSprite];
 			sprite.position         = CGPointMake( spriteX, spriteY );
+            sprite.xScale           = scaleX;
+            sprite.yScale           = scaleY;
             sprite.zPosition        = VNSceneCharacterLayer;
             [self addChild:sprite];
             
@@ -951,12 +955,17 @@ VNScene* theCurrentScene = nil;
         SKSpriteNode* actualSprite = sprites[spriteName];
         NSNumber* spriteX = @(actualSprite.position.x); // Get coordinates; these will be saved to the dictionary.
         NSNumber* spriteY = @(actualSprite.position.y);
+        // store scaling data as well (this is used mostly for inverted sprites)
+        NSNumber* scaleX = @(actualSprite.xScale);
+        NSNumber* scaleY = @(actualSprite.yScale);
         
         // Save relevant data (sprite name and coordinates) in a dictionary
         NSMutableDictionary* tempSpriteDictionary = [NSMutableDictionary dictionaryWithCapacity:3];
         [tempSpriteDictionary setValue:spriteName forKey:@"name"];
         [tempSpriteDictionary setValue:spriteX forKey:@"x"];
         [tempSpriteDictionary setValue:spriteY forKey:@"y"];
+        [tempSpriteDictionary setValue:scaleX forKey:@"scale x"];
+        [tempSpriteDictionary setValue:scaleY forKey:@"scale y"];
         
         // Check to see if this has a different filename
         NSString* filenameOfSprite = [self filenameOfSpriteAlias:spriteName];
@@ -2670,6 +2679,64 @@ VNScene* theCurrentScene = nil;
             }
             
         }break;
+            
+        case VNScriptCommandFlipSprite:
+        {
+            NSString* spriteName = parameter1;
+            NSNumber* duration = [command objectAtIndex:2];
+            NSNumber* flipBool = [command objectAtIndex:3];
+            double durationAsDouble = 0.0;
+            BOOL flipHorizontal = YES;
+            
+            SKSpriteNode* sprite = [sprites objectForKey:spriteName];
+            if( sprite == nil ) {
+                return;
+            }
+            
+            [self createSafeSave];
+            
+            if( duration ) {
+                durationAsDouble = duration.doubleValue;
+            }
+            if( flipBool ) {
+                flipHorizontal = flipBool.boolValue;
+            }
+            
+            // If this has a duration of zero, the action will take place instantly and then the function will return
+            if( durationAsDouble <= 0.0 ) {
+                // determine flip style
+                if( flipHorizontal == YES) {
+                    sprite.xScale = sprite.xScale * (-1);
+                } else {
+                    sprite.yScale = sprite.yScale * (-1);
+                }
+                return;
+            }
+            
+            [self setEffectRunningFlag];
+            
+            float scaleToX = sprite.xScale;
+            float scaleToY = sprite.yScale;
+            SKAction* scalingAction = nil;
+            
+            // determine what kind of action to take (this will determine scaling values)
+            if( flipHorizontal == YES ) {
+                scaleToX = scaleToX * (-1);
+                scalingAction = [SKAction scaleXTo:scaleToX duration:durationAsDouble];
+            } else {
+                scaleToY = scaleToY * (-1);
+                scalingAction = [SKAction scaleYTo:scaleToY duration:durationAsDouble];
+            }
+            
+            SKAction* clearEffectFlag = [SKAction performSelector:@selector(clearEffectRunningFlag) onTarget:self];
+            SKAction* theSequence = [SKAction sequence:@[scalingAction, clearEffectFlag]];
+            //CCActionScaleTo* scalingAction = [CCActionScaleTo actionWithDuration:durationAsDouble scaleX:scaleToX scaleY:scaleToY];
+            //CCActionCallFunc* clearEffectFlag = [CCActionCallFunc actionWithTarget:self selector:@selector(clearEffectRunningFlag)];
+            //CCActionSequence* theSequence = [CCActionSequence actions:scalingAction, clearEffectFlag, nil];
+            [sprite runAction:theSequence];
+            
+        }break;
+
     
             
         default:

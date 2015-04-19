@@ -87,6 +87,7 @@
 #define VNScriptCommandSetTypewriterText        132
 #define VNScriptCommandSetSpeechbox             133
 #define VNScriptCommandSetSpriteAlias           134
+#define VNScriptCommandFlipSprite               135
 
 // The command strings. Each one starts with a dot (the parser will only check treat a line as a command if it starts
 // with a dot), and is followed by some parameters, separated by colons.
@@ -124,6 +125,7 @@
 #define VNScriptStringSetTypewriterText         @".settypewritertext"   // Typewriter text, in which dialogue appears one character at a time
 #define VNScriptStringSetSpriteAlias            @".setspritealias"      // Assigns a filename to a sprite alias
 #define VNScriptStringSetSpeechbox              @".setspeechbox"        // dynamically change speechbox sprite
+#define VNScriptStringFlipSprite                @".flipsprite"          // flips sprite around (left/right or upside-down)
 
 // Script syntax
 #define VNScriptSeparationString               @":"
