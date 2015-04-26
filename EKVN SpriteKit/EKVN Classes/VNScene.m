@@ -349,7 +349,17 @@ VNScene* theCurrentScene = nil;
     }
     
     [self updateTypewriterTextSettings];
-
+    
+    // Choicebox offsets
+    NSNumber* valueForChoiceboxOffsetX = [record objectForKey:VNSceneViewChoiceButtonOffsetX];
+    NSNumber* valueForChoiceboxOffsetY = [record objectForKey:VNSceneViewChoiceButtonOffsetY];
+    
+    if( valueForChoiceboxOffsetX ) {
+        choiceButtonOffsetX = (CGFloat) valueForChoiceboxOffsetX.doubleValue;
+    }
+    if( valueForChoiceboxOffsetY ) {
+        choiceButtonOffsetY = (CGFloat) valueForChoiceboxOffsetY.doubleValue;
+    }
 }
 
 // Loads the default, hard-coded values for the view / UI settings dictionary.
@@ -602,6 +612,16 @@ VNScene* theCurrentScene = nil;
     NSNumber* blockSkippingUntilTextIsDone = [viewSettings objectForKey:VNSceneViewNoSkipUntilTextShownKey];
     if( blockSkippingUntilTextIsDone ) {
         noSkippingUntilTextIsShown = [blockSkippingUntilTextIsDone boolValue];
+    }
+    
+    // Load choicebox/choice-button offsets
+    NSNumber* valueForChoiceboxOffsetX = [viewSettings objectForKey:VNSceneViewChoiceButtonOffsetX];
+    NSNumber* valueForChoiceboxOffsetY = [viewSettings objectForKey:VNSceneViewChoiceButtonOffsetY];
+    if( valueForChoiceboxOffsetX ) {
+        choiceButtonOffsetX = (CGFloat) valueForChoiceboxOffsetX.doubleValue;
+    }
+    if( valueForChoiceboxOffsetY ) {
+        choiceButtonOffsetY = (CGFloat) valueForChoiceboxOffsetY.doubleValue;
     }
 }
 
@@ -1929,11 +1949,11 @@ VNScene* theCurrentScene = nil;
                 float spaceBetweenButtons   = button.frame.size.height * 0.2;
                 float buttonHeight          = button.frame.size.height;
                 float totalButtonSpace      = buttonHeight + spaceBetweenButtons;
-                float startingPosition      = (screenHeight * 0.5) + ( ( numberOfChoices / 2 ) * totalButtonSpace );
+                float startingPosition      = (screenHeight * 0.5) + ( ( numberOfChoices / 2 ) * totalButtonSpace ) + choiceButtonOffsetY;
                 float buttonY               = startingPosition + ( i * totalButtonSpace );
                 
                 // Set button position
-                button.position = CGPointMake( screenWidth * 0.5, buttonY );
+                button.position = CGPointMake( (screenWidth * 0.5) + choiceButtonOffsetX, buttonY );
                 button.zPosition = VNSceneButtonsLayer;
                 button.name = [NSString stringWithFormat:@"%d", i];
                 //[self addChild:button z:VNSceneButtonsLayer name:[NSString stringWithFormat:@"%d", i]];
@@ -2345,11 +2365,11 @@ VNScene* theCurrentScene = nil;
                 float spaceBetweenButtons   = button.frame.size.height * 0.2; // 20% of button sprite height
                 float buttonHeight          = button.frame.size.height;
                 float totalButtonSpace      = buttonHeight + spaceBetweenButtons; // total used-up space = 120% of button height
-                float startingPosition      = (screenHeight * 0.5) + ( ( numberOfChoices * 0.5 ) * totalButtonSpace );
+                float startingPosition      = (screenHeight * 0.5) + ( ( numberOfChoices * 0.5 ) * totalButtonSpace ) + choiceButtonOffsetY;
                 float buttonY               = startingPosition + ( i * totalButtonSpace ); // This button's position
                 
                 // Set button position and other attributes
-                button.position     = CGPointMake( screenWidth * 0.5, buttonY );
+                button.position     = CGPointMake( (screenWidth * 0.5) + choiceButtonOffsetX, buttonY );
                 //button.color        = [[CCColor alloc] initWithCcColor3b:buttonUntouchedColors];
                 button.color        = buttonUntouchedColors;
                 button.zPosition    = VNSceneButtonsLayer;
@@ -2734,6 +2754,20 @@ VNScene* theCurrentScene = nil;
             //CCActionCallFunc* clearEffectFlag = [CCActionCallFunc actionWithTarget:self selector:@selector(clearEffectRunningFlag)];
             //CCActionSequence* theSequence = [CCActionSequence actions:scalingAction, clearEffectFlag, nil];
             [sprite runAction:theSequence];
+            
+        }break;
+            
+        case VNScriptCommandModifyChoiceboxOffset:
+        {
+            NSNumber* xOffset = [command objectAtIndex:1];
+            NSNumber* yOffset = [command objectAtIndex:2];
+            
+            choiceButtonOffsetX = (CGFloat) xOffset.doubleValue;
+            choiceButtonOffsetY = (CGFloat) yOffset.doubleValue;
+            
+            // save offset data to record
+            [record setValue:@(choiceButtonOffsetX) forKey:VNSceneViewChoiceButtonOffsetX];
+            [record setValue:@(choiceButtonOffsetY) forKey:VNSceneViewChoiceButtonOffsetY];
             
         }break;
 

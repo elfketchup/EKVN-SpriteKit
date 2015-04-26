@@ -1,3 +1,6 @@
+version 1.0.7.1 Apr-26-2015
+. [NEW] Added .MODIFYCHOICEBOXOFFSET script command to adjust the position of buttons during "make a choice" segments.
+
 version 1.0.7 Apr-20-2015
 . [NEW] Added .FLIPSPRITE script command to flip sprite horizontally (or vertically).
 
