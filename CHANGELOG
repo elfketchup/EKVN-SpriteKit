@@ -1,3 +1,6 @@
+version 1.0.7.2 Apr-28-2015
+. [NEW] Added .SCALEBACKGROUND and .SCALESPRITE script commands to dynamically resize backgrounds and sprites.
+
 version 1.0.7.1 Apr-26-2015
 . [NEW] Added .MODIFYCHOICEBOXOFFSET script command to adjust the position of buttons during "make a choice" segments.
 

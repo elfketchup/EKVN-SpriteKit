@@ -238,6 +238,12 @@ VNScene* theCurrentScene = nil;
         background.zPosition = VNSceneBackgroundLayer;
         background.name = VNSceneTagBackground;
         [self addChild:background];
+        
+        // load background scale
+        NSNumber* savedBackgroundScale = [record objectForKey:VNSceneBackgroundScaleKey];
+        if( savedBackgroundScale ) {
+            [background setScale:savedBackgroundScale.floatValue];
+        }
 	}
 	
     // Load any music that was saved
@@ -1855,6 +1861,7 @@ VNScene* theCurrentScene = nil;
             [record removeObjectForKey:VNSceneBackgroundToShowKey];
             [record removeObjectForKey:VNSceneBackgroundXKey];
             [record removeObjectForKey:VNSceneBackgroundYKey];
+            [record removeObjectForKey:VNSceneBackgroundScaleKey];
             
             // Check the value of the string. If the string is "nil", then just get rid of any existing background
             // data. Otherwise, VNSceneView will try to use the string as a file name.
@@ -1870,6 +1877,9 @@ VNScene* theCurrentScene = nil;
                 [record setObject:backgroundName forKey:VNSceneBackgroundToShowKey]; // Update record with the background image's file name
                 [record setObject:@(updatedBackground.position.x) forKey:VNSceneBackgroundXKey];
                 [record setObject:@(updatedBackground.position.y) forKey:VNSceneBackgroundYKey];
+                
+                //CGFloat totalScale = (updatedBackground.xScale + updatedBackground.yScale) * 0.5;
+                //[record setObject:@(totalScale) forKey:VNSceneBackgroundScaleKey];
             }
             
         }break;
@@ -2771,7 +2781,68 @@ VNScene* theCurrentScene = nil;
             
         }break;
 
-    
+        case VNScriptCommandScaleBackground:
+        {
+            SKSpriteNode* background = (SKSpriteNode*) [self childNodeWithName:VNSceneTagBackground];
+            if( background == nil )
+                return;
+            
+            NSNumber* scaleNumber = [command objectAtIndex:1];
+            NSNumber* durationNumber = [command objectAtIndex:2];
+            double theDuration = durationNumber.doubleValue;
+            
+            if( theDuration <= 0.0 ) {
+                [background setScale:scaleNumber.floatValue];
+            } else {
+                [self createSafeSave];
+                [self setEffectRunningFlag];
+                
+                SKAction* scaleAction = [SKAction scaleTo:scaleNumber.floatValue duration:theDuration];
+                SKAction* callClearFlag = [SKAction performSelector:@selector(clearEffectRunningFlag) onTarget:self];
+                SKAction* sequence = [SKAction sequence:@[scaleAction, callClearFlag]];
+                [background runAction:sequence];
+            }
+            
+            [record setValue:@(scaleNumber.floatValue) forKey:VNSceneBackgroundScaleKey];
+            
+        }break;
+            
+        case VNScriptCommandScaleSprite:
+        {
+            NSString* spriteName = [command objectAtIndex:1];
+            NSNumber* scaleNumber = [command objectAtIndex:2];
+            NSNumber* durationNumber = [command objectAtIndex:3];
+            
+            SKSpriteNode* sprite = sprites[spriteName];
+            if( sprite == nil )
+                return;
+            
+            CGFloat theScale = (CGFloat) scaleNumber.doubleValue;
+            CGFloat theDuration = (CGFloat) durationNumber.doubleValue;
+            
+            CGFloat xScale = theScale;
+            CGFloat yScale = theScale;
+            
+            // Invert x/y-scale values when dealing with flipped sprites
+            if( sprite.xScale < 0.0 ) {
+                xScale = xScale * (-1);
+            }
+            if( sprite.yScale < 0.0 ) {
+                yScale = yScale * (-1);
+            }
+            
+            if( theDuration <= 0.0 ) {
+                sprite.xScale = xScale;
+                sprite.yScale = yScale;
+            } else {
+                [self createSafeSave];
+                [self setEffectRunningFlag];
+                SKAction* scaleAction = [SKAction scaleXTo:xScale y:yScale duration:theDuration];
+                SKAction* callFunc = [SKAction performSelector:@selector(clearEffectRunningFlag) onTarget:self];
+                SKAction* sequence = [SKAction sequence:@[scaleAction, callFunc]];
+                [sprite runAction:sequence];
+            }
+        }
             
         default:
         {
