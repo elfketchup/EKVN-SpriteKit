@@ -73,6 +73,10 @@ VNScene* theCurrentScene = nil;
     cinematicTextCounter        = 0;
     cinematicTextSpeedInFrames  = 0;
     
+    // Background music fade data
+    BGMValueOfASingleFrame  = 1.0 / 60.0;
+    BGMFadeType             = VNSceneBGMFadeTypeNone;
+    
     // Set default values for typewriter text mode
     TWModeEnabled                   = NO; // Off by default (standard EKVN text mode)
     TWSpeedInFrames                 = 0;
@@ -1226,6 +1230,42 @@ VNScene* theCurrentScene = nil;
                 }
             }
             
+            // Update BGM fade data; this only works if there's a valid fade tyep AND some music is playing
+            if( BGMFadeType != VNSceneBGMFadeTypeNone && [[OALSimpleAudio sharedInstance] bgPlaying] == true) {
+                
+                float currentBGMVolume = [[OALSimpleAudio sharedInstance] bgVolume];
+                
+                if( BGMFadeType == VNSceneBGMFadeTypeDecrease ) { // CASE 1: Decreasing volume from 1.0 to 0.0
+                    if( currentBGMVolume <= 0.0 ) { // check if it's time to stop the process
+                        [[OALSimpleAudio sharedInstance] stopBg];
+                        BGMFadeType = VNSceneBGMFadeTypeNone;
+                    } else {
+                        // otherwise, the process continues
+                        currentBGMVolume = currentBGMVolume - BGMValueOfASingleFrame;
+                        
+                        // clamp
+                        if( currentBGMVolume < 0.0 ) {
+                            currentBGMVolume = 0.0;
+                        }
+                        
+                        [[OALSimpleAudio sharedInstance] setBgVolume:currentBGMVolume];
+                    }
+                } else if( BGMFadeType == VNSceneBGMFadeTypeIncrease ) { // CASE 2: Increasing volume from 0.0 to 1.0
+                    if( currentBGMVolume >= 1.0 ) { // end process
+                        BGMFadeType = VNSceneBGMFadeTypeNone;
+                    } else {
+                        currentBGMVolume = currentBGMVolume + BGMValueOfASingleFrame;
+                        
+                        // clamp
+                        if( currentBGMVolume > 1.0 ) {
+                            currentBGMVolume = 1.0;
+                        }
+                        
+                        [[OALSimpleAudio sharedInstance] setBgVolume:currentBGMVolume];
+                    }
+                }
+            }
+            
             break;
             
         // Is an effect currently running? (this is normally when the "safe save" data comes into play)
@@ -2167,33 +2207,57 @@ VNScene* theCurrentScene = nil;
             
             NSString* musicName = parameter1;
             NSNumber* musicShouldLoop = [command objectAtIndex:2];
+            NSNumber* durationOfFade = [command objectAtIndex:3];
+            float fadeDuration = durationOfFade.floatValue;
             
             // Check if the value is 'nil', meaning that no music should be played
             if( [musicName caseInsensitiveCompare:VNScriptNilValue] == NSOrderedSame ) {
                 
+                isPlayingMusic = NO;
                 [record removeObjectForKey:VNSceneMusicToPlayKey]; // Remove music data from saved-game record
                 [record removeObjectForKey:VNSceneMusicShouldLoopKey];
                 
-                //if( [[OALSimpleAudio sharedInstance] bgPlaying] == true )
-                //    [[OALSimpleAudio sharedInstance] stopBg]; // Stop any existing music
-                [self stopBGMusic];
+                if( [[OALSimpleAudio sharedInstance] bgPlaying] == true ) {
+                    
+                    //[[OALSimpleAudio sharedInstance] stopBg]; // Stop any existing music
+                    
+                    // Set fade-out data
+                    if( fadeDuration > 0.0 ) {
+                        BGMFadeType = VNSceneBGMFadeTypeDecrease;
+                        //BGMValueOfASingleFrame = fadeDuration * (1.0/60.0);
+                        BGMValueOfASingleFrame = 1.0 / (60.0 * fadeDuration);
+                        [[OALSimpleAudio sharedInstance] setBgVolume:1.0]; // by default put it at full blast
+                    }
+                }
                 
             } else {
-            
+                
+                isPlayingMusic = YES;
+                bool willLoop = false;
                 [record setValue:musicName forKey:VNSceneMusicToPlayKey]; // Store music data in dictionary
                 [record setValue:musicShouldLoop forKey:VNSceneMusicShouldLoopKey];
                 
+                if( [musicShouldLoop boolValue] == YES )
+                    willLoop = true;
+                
                 // Stop any old background music that might be playing
-                //if( [[OALSimpleAudio sharedInstance] bgPlaying] == true )
-                //    [[OALSimpleAudio sharedInstance] stopBg];
-                [self stopBGMusic];
+                if( [[OALSimpleAudio sharedInstance] bgPlaying] == true )
+                    [[OALSimpleAudio sharedInstance] stopBg];
                 
                 // Play the new background music
-                //[[OALSimpleAudio sharedInstance] playBg:musicName loop:willLoop];
-                [self playBGMusic:musicName willLoop:[musicShouldLoop boolValue]];
+                [[OALSimpleAudio sharedInstance] playBg:musicName loop:willLoop];
+                
+                // set fade-in data
+                if( fadeDuration > 0.0 ) {
+                    BGMFadeType = VNSceneBGMFadeTypeIncrease;
+                    //BGMValueOfASingleFrame = fadeDuration * (1.0/60.0);
+                    BGMValueOfASingleFrame = 1.0 / (60.0 * fadeDuration);
+                    [[OALSimpleAudio sharedInstance] setBgVolume:0.0]; // by default have it set to silence (to build up later)
+                }
             }
-                        
+            
         }break;
+
             
         // This command sets a variable (or "flag"), which is usually an "int" value stored in an NSNumber object by a dictionary.
         // VNScene stores a local dictionary, and whenever the game is saved, the contents of that dictionary are copied over to
